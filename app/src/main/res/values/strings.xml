@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XploreNow</string>
+    <string name="home">Inicio</string>
+    <string name="destinations">Destinos</string>
+    <string name="activities">Actividades</string>
+    <string name="reservations">Reservas</string>
+    <string name="profile">Perfil</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="register">Registrarse</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="name">Nombre</string>
+    <string name="loading">Cargando...</string>
+    <string name="error_network">Error de conexión. Intentá de nuevo.</string>
+    <string name="logout">Cerrar sesión</string>
+</resources>
