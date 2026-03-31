@@ -1,6 +1,9 @@
 package com.uade.xplorenow.data.remote;
 
+import com.uade.xplorenow.data.local.SessionManager;
+
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -15,6 +18,19 @@ public class ApiClient {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    // AuthInterceptor: agrega el JWT a todas las requests
+                    Request original = chain.request();
+                    SessionManager session = SessionManager.getInstance();
+                    String token = (session != null) ? session.getCachedToken() : null;
+                    if (token != null && !token.isEmpty()) {
+                        Request authenticated = original.newBuilder()
+                                .header("Authorization", "Bearer " + token)
+                                .build();
+                        return chain.proceed(authenticated);
+                    }
+                    return chain.proceed(original);
+                })
                 .addInterceptor(logging)
                 .build();
 

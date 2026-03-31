@@ -4,17 +4,68 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.uade.xplorenow.databinding.FragmentReservationListBinding;
 
 public class ReservationListFragment extends Fragment {
+
+    private FragmentReservationListBinding binding;
+    private ReservationViewModel viewModel;
+    private ReservationAdapter adapter;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView tv = new TextView(requireContext());
-        tv.setText("TODO: ReservationListFragment");
-        return tv;
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentReservationListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        viewModel = new ViewModelProvider(this).get(ReservationViewModel.class);
+
+        adapter = new ReservationAdapter();
+        binding.rvReservations.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvReservations.setAdapter(adapter);
+
+        viewModel.getMyReservations().observe(getViewLifecycleOwner(), result -> {
+            switch (result.getStatus()) {
+                case LOADING:
+                    binding.progress.setVisibility(View.VISIBLE);
+                    binding.tvEmpty.setVisibility(View.GONE);
+                    binding.tvError.setVisibility(View.GONE);
+                    break;
+                case SUCCESS:
+                    binding.progress.setVisibility(View.GONE);
+                    if (result.getData() == null || result.getData().isEmpty()) {
+                        binding.tvEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.tvEmpty.setVisibility(View.GONE);
+                        adapter.setReservations(result.getData());
+                    }
+                    break;
+                case ERROR:
+                    binding.progress.setVisibility(View.GONE);
+                    binding.tvError.setText(result.getMessage());
+                    binding.tvError.setVisibility(View.VISIBLE);
+                    break;
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
