@@ -1,6 +1,9 @@
 # Apuntes de clase — Desarrollo de Aplicaciones I (UADE)
 
 > Apuntes tomados en clase para guiar la implementación de XploreNow Android.
+### REPO DEL DOCENTE: https://github.com/Horix89/mobile-practices-android ###
+
+### Carpeta de PPTs de clases: C:\Users\asilvestre\OneDrive - PSF\Ariel UADE\2026\1er cuatrimestre\Aplicaciones\ppts ###
 
 ---
 
@@ -88,3 +91,78 @@ Librería que permite resolver acciones HTTP de APIs.
 3. Definir la interfaz de la API.
 
 > Ver ejemplos detallados en el PPT de la clase.
+
+
+# Clase 7/4
+
+## inyección de dependendencias & retrofit con Hilt
+
+Storage | Persistir información en el dispositivo | para log in
+
+Repaso clase anterior:
+
+- Creamos un singleton manual para retrofit
+    - tenia como objetivo unicamente devolver una instancia de retrofit.
+    Unit test:
+        - Controlado
+        - acotado
+        - repetible
+
+- ¿para que sirve la IDD?
+    - {la D de solid} dependencia SOLID -> Dependency Inversion => todos los módulos deben depender de abstracciones.
+    - {Principio} princpio de inversión de control => "no busques tus dependencias, yo te las doy" -> el fragment no controla el cuando ni el como se construyen sus dependencias. un agente externo (el framework) se las entrega.
+    - {Técnica} Inyección de dependencias -> es un patrón de diseño doonde las dependencias se pasan desde afuera (por constructor por campo o por método) para generar desacoplamiento. Hilt automatiza...
+
+    la anotation usada es @Inject para inyectar la dependencia de la api.
+    llena el objeto api en tiempo de ejecución
+
+    Contenedor / container -> crea y guarda objetos. Evita hacer new
+    Scopes -> cuanto tiempo vive una instancia dentro del contenedor @singleton @ActivityScoped 
+        |_ se pueden crear patrones de creación sin declarar lineas de código. Solo notations.
+        |_ @ActivityScoped deja la instancia creada en el contenedor antes de ...
+
+    ciclo de vida -> sabe donde tiene que inyectar en que momento del tiempo de ejecución
+
+### Anotaciones clave:
+- @HiltAndroidApp => en la apliación
+- @AndroidEntroPoint => en Acrivity / Fragment
+- @Module / provides
+
+Build.Gradle (project)
+
+Vamos a agregar una clase llamada Application => va a ser el punto de entrada a la app
+cuando se carga aplication no hay ningún activity cargado en UI aún.
+
+@HiltAndroidApp // ==> arranca el contenedor de hilt va e nla clase application una sola vez
+public class MyApp
+    extendes Application {
+
+    }
+
+@AndroidEntryPoint
+public class MainActivity
+    extendes AppCompatActivity{
+
+    }
+
+NetworkModule => ¿reemplaza el retrofitClient?
+
+@provides -> este metodo devuelve una dependencia
+
+paso 4 inyectar el fragmento:
+
+migrar el proyecto a Hilt
+
+### JWT + LocalStorage => Autorización
+
+estructura de un JWT => Header / Payload / Signature
+
+el JWT está encodeado no encriptado. tiene un encode en base64.
+
+=====================================================================
+
+modificamos el networkModule para que Retrofit use un OkHttpCliente con un interceptor que lee el token del TokenManager
+|_ declaramos un objeto que va a entrar en el contenedor de Hilt (?) => a chequear
+
+
+

@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.profile;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.uade.xplorenow.R;
 import com.uade.xplorenow.databinding.FragmentProfileBinding;
 
+@AndroidEntryPoint
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;

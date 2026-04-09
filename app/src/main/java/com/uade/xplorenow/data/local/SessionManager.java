@@ -2,6 +2,11 @@ package com.uade.xplorenow.data.local;
 
 import android.content.Context;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import androidx.datastore.preferences.core.MutablePreferences;
 import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.PreferencesKeys;
@@ -27,26 +32,14 @@ public class SessionManager {
     private static final Preferences.Key<String> KEY_USER_EMAIL = PreferencesKeys.stringKey("user_email");
     private static final Preferences.Key<String> KEY_USER_ROLE  = PreferencesKeys.stringKey("user_role");
 
-    private static SessionManager instance;
     private final RxDataStore<Preferences> dataStore;
 
     // Cache en memoria para el AuthInterceptor (OkHttp es síncrono)
     private String cachedToken = null;
 
-    private SessionManager(Context context) {
+    @Inject
+    public SessionManager(@ApplicationContext Context context) {
         dataStore = new RxPreferenceDataStoreBuilder(context, DATASTORE_NAME).build();
-    }
-
-    public static synchronized SessionManager getInstance(Context context) {
-        if (instance == null) {
-            instance = new SessionManager(context.getApplicationContext());
-        }
-        return instance;
-    }
-
-    /** Para uso en el AuthInterceptor de OkHttp (síncrono, usa cache en memoria) */
-    public static SessionManager getInstance() {
-        return instance;
     }
 
     public String getCachedToken() {

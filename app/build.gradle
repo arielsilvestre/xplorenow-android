@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -63,6 +64,10 @@ dependencies {
 
     // Biometría (semana 6)
     implementation 'androidx.biometric:biometric:1.2.0-alpha05'
+
+    // Hilt (semana 5 — DI)
+    implementation 'com.google.dagger:hilt-android:2.51.1'
+    annotationProcessor 'com.google.dagger:hilt-android-compiler:2.51.1'
 
     // Core
     implementation 'androidx.appcompat:appcompat:1.7.0'

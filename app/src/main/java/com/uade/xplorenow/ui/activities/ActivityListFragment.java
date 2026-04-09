@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.activities;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.uade.xplorenow.R;
 import com.uade.xplorenow.databinding.FragmentActivityListBinding;
 
+@AndroidEntryPoint
 public class ActivityListFragment extends Fragment {
 
     private FragmentActivityListBinding binding;

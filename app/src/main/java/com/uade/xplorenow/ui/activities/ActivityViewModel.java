@@ -9,12 +9,18 @@ import com.uade.xplorenow.util.Resource;
 
 import java.util.List;
 
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+import javax.inject.Inject;
+
+@HiltViewModel
 public class ActivityViewModel extends ViewModel {
 
     private final ActivityRepository repository;
 
-    public ActivityViewModel() {
-        repository = ActivityRepository.getInstance();
+    @Inject
+    public ActivityViewModel(ActivityRepository repository) {
+        this.repository = repository;
     }
 
     public LiveData<Resource<List<TourActivity>>> getActivities() {

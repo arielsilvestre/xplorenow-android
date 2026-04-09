@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.auth;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import com.uade.xplorenow.databinding.FragmentLoginBinding;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
+@AndroidEntryPoint
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;

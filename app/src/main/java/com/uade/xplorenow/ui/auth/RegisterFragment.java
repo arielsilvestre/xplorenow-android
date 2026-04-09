@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.auth;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.navigation.Navigation;
 import com.uade.xplorenow.R;
 import com.uade.xplorenow.databinding.FragmentRegisterBinding;
 
+@AndroidEntryPoint
 public class RegisterFragment extends Fragment {
 
     private FragmentRegisterBinding binding;

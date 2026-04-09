@@ -3,6 +3,8 @@ package com.uade.xplorenow;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -10,10 +12,16 @@ import androidx.navigation.ui.NavigationUI;
 import com.uade.xplorenow.data.local.SessionManager;
 import com.uade.xplorenow.databinding.ActivityMainBinding;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    SessionManager sessionManager;
 
     private ActivityMainBinding binding;
     private final CompositeDisposable disposables = new CompositeDisposable();
@@ -23,9 +31,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        // Inicializar SessionManager con el contexto de la app
-        SessionManager sessionManager = SessionManager.getInstance(this);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);

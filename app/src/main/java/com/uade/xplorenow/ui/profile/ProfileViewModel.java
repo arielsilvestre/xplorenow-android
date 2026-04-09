@@ -7,25 +7,30 @@ import androidx.lifecycle.ViewModel;
 import com.uade.xplorenow.data.local.SessionManager;
 import com.uade.xplorenow.data.model.User;
 
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
+@HiltViewModel
 public class ProfileViewModel extends ViewModel {
 
     private final MutableLiveData<User> user = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loggedOut = new MutableLiveData<>();
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private final SessionManager sessionManager;
 
-    public ProfileViewModel() {
+    @Inject
+    public ProfileViewModel(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
         loadUser();
     }
 
     private void loadUser() {
-        SessionManager session = SessionManager.getInstance();
-        if (session == null) return;
-
         disposables.add(
-            session.getUser()
+            sessionManager.getUser()
                 .take(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -44,13 +49,8 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void logout() {
-        SessionManager session = SessionManager.getInstance();
-        if (session == null) {
-            loggedOut.setValue(true);
-            return;
-        }
         disposables.add(
-            session.clearSession()
+            sessionManager.clearSession()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     prefs -> loggedOut.setValue(true),

@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.guides;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+@AndroidEntryPoint
 public class GuideListFragment extends Fragment {
     @Nullable
     @Override
