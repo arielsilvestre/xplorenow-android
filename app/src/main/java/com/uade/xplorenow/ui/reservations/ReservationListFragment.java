@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.reservations;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.uade.xplorenow.databinding.FragmentReservationListBinding;
 
+@AndroidEntryPoint
 public class ReservationListFragment extends Fragment {
 
     private FragmentReservationListBinding binding;

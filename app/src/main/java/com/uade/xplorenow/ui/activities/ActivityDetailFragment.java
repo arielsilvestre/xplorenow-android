@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.activities;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.uade.xplorenow.R;
 import com.uade.xplorenow.databinding.FragmentActivityDetailBinding;
 import java.util.Locale;
 
+@AndroidEntryPoint
 public class ActivityDetailFragment extends Fragment {
 
     private FragmentActivityDetailBinding binding;

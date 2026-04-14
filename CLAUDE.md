@@ -114,6 +114,42 @@ The course adds new requirements each week. When implementing features:
 - When a new course topic is introduced (e.g., biometrics, maps), implement it as an additive layer — do not refactor working code unless necessary
 - Always check `ppts/` for the latest class material before implementing a new feature; the implementation should reflect what was taught
 
+## PPT Reading Protocol (MANDATORY before any code change)
+
+**Before making any code change or implementation decision**, read the relevant PPT slides for the current topic:
+
+- **PPT path (laptop only):** `C:\Users\asilvestre\OneDrive - PSF\Ariel UADE\2026\1er cuatrimestre\Aplicaciones\ppts`
+- If the path is not accessible, the exception is: **"la ruta asignada es para la laptop"** — in that case, rely on `apuntes.md` and the user's description of class content.
+- Cross-reference any implementation with what was actually taught in the corresponding class. If the PPT contradicts the apuntes, flag it to the user before proceeding.
+
+## Plan Mode Protocol for Complex Tasks
+
+When entering Plan Mode for a complex task (multi-file changes, new feature, architecture migration, etc.), follow this orchestration procedure:
+
+### Step 1 — Read PPTs + apuntes
+Read the relevant class material before designing anything. If PPT path unavailable, use apuntes.md.
+
+### Step 2 — Explore phase (subagent: Explore)
+Launch an Explore subagent to map the existing code affected by the task: files, classes, dependencies, current patterns. Do not design until this is done.
+
+### Step 3 — Plan design (subagent: Plan)
+Launch a Plan subagent with the findings from Step 2. Output: ordered list of files to create/modify, rationale, risks, and rollback strategy.
+
+### Step 4 — Present plan to user
+Show the plan clearly before writing any code. Wait for explicit approval.
+
+### Step 5 — Implement in stages
+Break implementation into discrete stages (e.g., per layer: infrastructure → data → UI). After each stage:
+- Run a build check or relevant test if possible
+- Confirm stage is stable before proceeding to the next
+- If a stage fails, fix it before moving forward — do not accumulate broken stages
+
+### Step 6 — Final verification
+After all stages: full build check, smoke test of affected flows, confirm no regressions in existing functionality.
+
+### Step 7 — PR
+Create a PR per the git workflow rules. Never push directly to main.
+
 ## Delivery Schedule
 
 | Delivery | Date | Content |

@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.reservations;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.uade.xplorenow.ui.activities.ActivityViewModel;
 import java.util.Calendar;
 import java.util.Locale;
 
+@AndroidEntryPoint
 public class ReservationCreateFragment extends Fragment {
 
     private FragmentReservationCreateBinding binding;

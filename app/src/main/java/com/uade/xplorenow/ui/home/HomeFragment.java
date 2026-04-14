@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.home;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.navigation.Navigation;
 import com.uade.xplorenow.R;
 import com.uade.xplorenow.databinding.FragmentHomeBinding;
 
+@AndroidEntryPoint
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;

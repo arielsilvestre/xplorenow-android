@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.uade.xplorenow.data.model.TourActivity;
-import com.uade.xplorenow.data.remote.ApiClient;
+import com.uade.xplorenow.data.remote.ApiService;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.uade.xplorenow.data.remote.dto.ApiResponse;
 import com.uade.xplorenow.util.Resource;
 
@@ -14,24 +17,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class ActivityRepository {
 
-    private static ActivityRepository instance;
+    private final ApiService apiService;
 
-    private ActivityRepository() {}
-
-    public static ActivityRepository getInstance() {
-        if (instance == null) {
-            instance = new ActivityRepository();
-        }
-        return instance;
+    @Inject
+    public ActivityRepository(ApiService apiService) {
+        this.apiService = apiService;
     }
 
     public LiveData<Resource<List<TourActivity>>> getActivities() {
         MutableLiveData<Resource<List<TourActivity>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
 
-        ApiClient.getInstance().getService().getActivities()
+        apiService.getActivities()
                 .enqueue(new Callback<ApiResponse<List<TourActivity>>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<List<TourActivity>>> call,
@@ -56,7 +56,7 @@ public class ActivityRepository {
         MutableLiveData<Resource<TourActivity>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
 
-        ApiClient.getInstance().getService().getActivityById(id)
+        apiService.getActivityById(id)
                 .enqueue(new Callback<ApiResponse<TourActivity>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<TourActivity>> call,

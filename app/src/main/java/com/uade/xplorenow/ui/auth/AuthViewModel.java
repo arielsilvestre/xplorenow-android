@@ -8,12 +8,18 @@ import com.uade.xplorenow.data.remote.dto.LoginResponse;
 import com.uade.xplorenow.data.repository.AuthRepository;
 import com.uade.xplorenow.util.Resource;
 
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+import javax.inject.Inject;
+
+@HiltViewModel
 public class AuthViewModel extends ViewModel {
 
     private final AuthRepository repository;
 
-    public AuthViewModel() {
-        repository = AuthRepository.getInstance();
+    @Inject
+    public AuthViewModel(AuthRepository repository) {
+        this.repository = repository;
     }
 
     public LiveData<Resource<LoginResponse>> login(String email, String password) {

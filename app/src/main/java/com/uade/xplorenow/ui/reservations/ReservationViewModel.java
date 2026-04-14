@@ -9,12 +9,18 @@ import com.uade.xplorenow.util.Resource;
 
 import java.util.List;
 
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+import javax.inject.Inject;
+
+@HiltViewModel
 public class ReservationViewModel extends ViewModel {
 
     private final ReservationRepository repository;
 
-    public ReservationViewModel() {
-        repository = ReservationRepository.getInstance();
+    @Inject
+    public ReservationViewModel(ReservationRepository repository) {
+        this.repository = repository;
     }
 
     public LiveData<Resource<List<Reservation>>> getMyReservations() {

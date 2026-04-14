@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.uade.xplorenow.data.model.Reservation;
-import com.uade.xplorenow.data.remote.ApiClient;
+import com.uade.xplorenow.data.remote.ApiService;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.uade.xplorenow.data.remote.dto.ApiResponse;
 import com.uade.xplorenow.data.remote.dto.CreateReservationRequest;
 import com.uade.xplorenow.util.Resource;
@@ -15,24 +18,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class ReservationRepository {
 
-    private static ReservationRepository instance;
+    private final ApiService apiService;
 
-    private ReservationRepository() {}
-
-    public static ReservationRepository getInstance() {
-        if (instance == null) {
-            instance = new ReservationRepository();
-        }
-        return instance;
+    @Inject
+    public ReservationRepository(ApiService apiService) {
+        this.apiService = apiService;
     }
 
     public LiveData<Resource<List<Reservation>>> getMyReservations() {
         MutableLiveData<Resource<List<Reservation>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
 
-        ApiClient.getInstance().getService().getMyReservations()
+        apiService.getMyReservations()
                 .enqueue(new Callback<ApiResponse<List<Reservation>>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<List<Reservation>>> call,
@@ -59,7 +59,7 @@ public class ReservationRepository {
 
         CreateReservationRequest request = new CreateReservationRequest(activityId, date, people);
 
-        ApiClient.getInstance().getService().createReservation(request)
+        apiService.createReservation(request)
                 .enqueue(new Callback<ApiResponse<Reservation>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<Reservation>> call,
