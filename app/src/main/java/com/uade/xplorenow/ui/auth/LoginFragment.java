@@ -22,11 +22,16 @@ import com.uade.xplorenow.R;
 import com.uade.xplorenow.data.local.SessionManager;
 import com.uade.xplorenow.databinding.FragmentLoginBinding;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
 @AndroidEntryPoint
 public class LoginFragment extends Fragment {
+
+    @Inject
+    SessionManager sessionManager;
 
     private FragmentLoginBinding binding;
     private AuthViewModel viewModel;
@@ -71,9 +76,8 @@ public class LoginFragment extends Fragment {
         if (!canAuthenticate) return;
 
         // Revisar si hay sesión guardada
-        SessionManager session = SessionManager.getInstance(requireContext());
         disposables.add(
-            session.getToken()
+            sessionManager.getToken()
                 .take(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -145,7 +149,6 @@ public class LoginFragment extends Fragment {
                     break;
                 case SUCCESS:
                     setLoading(false);
-                    SessionManager session = SessionManager.getInstance(requireContext());
                     com.uade.xplorenow.data.model.User loginUser = result.getData().getUser();
                     Log.d("XploreNow", "Login SUCCESS — token=" + result.getData().getToken()
                             + " user=" + loginUser);
@@ -154,7 +157,7 @@ public class LoginFragment extends Fragment {
                     }
                     final com.uade.xplorenow.data.model.User finalUser = loginUser;
                     disposables.add(
-                        session.saveSession(result.getData().getToken(), finalUser)
+                        sessionManager.saveSession(result.getData().getToken(), finalUser)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                 prefs -> {

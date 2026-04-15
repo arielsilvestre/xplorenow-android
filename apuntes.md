@@ -164,5 +164,47 @@ el JWT está encodeado no encriptado. tiene un encode en base64.
 modificamos el networkModule para que Retrofit use un OkHttpCliente con un interceptor que lee el token del TokenManager
 |_ declaramos un objeto que va a entrar en el contenedor de Hilt (?) => a chequear
 
+### Estado de implementación (Clase 7/4)
 
+✅ Hilt migrado completamente (PR #5 mergeado en main)
+  - MyApp @HiltAndroidApp
+  - NetworkModule (@Provides OkHttpClient → Retrofit → ApiService)
+  - SessionModule (@Provides SessionManager)
+  - Todos los repositorios y ViewModels con @Inject constructor
+  - Todos los Fragments con @AndroidEntryPoint
+  - LoginFragment: SessionManager inyectado via @Inject (PR #6)
 
+✅ JWT interceptor: NetworkModule lee sessionManager.getCachedToken() en cada request
+✅ SessionManager: saveSession() guarda token en DataStore Y en cachedToken en memoria
+
+---
+
+# Fuera de clase — Trabajo propio
+
+## UI Redesign — Material Design 3 (Nature & Adventure)
+Branch: feature/ui-redesign-md3
+
+Estilo elegido: verde primario (#1A6B3C) + ámbar secundario (#F4A825), fondo blanco verdoso (#F6FAF7).
+
+### Cambios implementados
+
+**colors.xml** — Paleta MD3 completa: primary, secondary, surface, surface_variant, outline, error (todos los tokens on-*)
+
+**themes.xml** — Todos los roles MD3 mapeados + ShapeAppearance.Circle para avatar circular
+
+**fragment_login / register** — Hero de color primario (220dp/160dp) con nombre de app centrado. Card blanca flotante con marginTop=-28dp que solapa el hero. Formulario dentro de la card.
+
+**fragment_home** — Banner de bienvenida (card verde) + cards de navegación con ícono cuadrado redondeado + título + descripción + flecha.
+
+**item_activity** — Chip de categoría superpuesto sobre la imagen. Info row con precio a la izquierda y capacidad a la derecha.
+
+**fragment_activity_list / reservation_list** — MaterialToolbar con título.
+
+**fragment_activity_detail** — Hero 300dp + info card con marginTop=-24dp que solapa. Botón "Reservar" fijo al fondo usando FrameLayout (no scroll con él).
+
+**item_reservation** — Barra vertical de acento de 5dp a la izquierda (coloreada por estado desde Java). Cards más limpias.
+
+**fragment_profile** — ShapeableImageView circular con borde blanco (app:shapeAppearanceOverlay="@style/ShapeAppearance.Circle"). Header de color primario. Avatar solapa el header con marginTop=-50dp.
+
+### Pendiente
+- Logo de la app (formato SVG o PNG 512px con fondo transparente) → reemplazar @mipmap/ic_launcher en login y profile
