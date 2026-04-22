@@ -1,7 +1,5 @@
 package com.uade.xplorenow.ui.auth;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,32 +8,27 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.biometric.BiometricManager;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.uade.xplorenow.R;
-import com.uade.xplorenow.data.local.SessionManager;
+import com.uade.xplorenow.data.local.TokenManager;
+import com.uade.xplorenow.data.model.User;
 import com.uade.xplorenow.databinding.FragmentLoginBinding;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class LoginFragment extends Fragment {
 
     @Inject
-    SessionManager sessionManager;
+    TokenManager tokenManager;
 
     private FragmentLoginBinding binding;
     private AuthViewModel viewModel;
-    private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Nullable
     @Override
@@ -49,79 +42,10 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
-
-        binding.tvRegisterLink.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_login_to_register);
-        });
-
-        // Biometría: ofrecer si hay token guardado y el dispositivo lo soporta
-        checkBiometricAvailability();
-    }
-
-    /**
-     * Verifica si el dispositivo soporta biometría y si hay una sesión guardada.
-     * Si ambas condiciones se cumplen, muestra el prompt biométrico automáticamente.
-     * (Semana 6: Biometría y Sesiones)
-     */
-    private void checkBiometricAvailability() {
-        BiometricManager biometricManager = BiometricManager.from(requireContext());
-        boolean canAuthenticate = biometricManager.canAuthenticate(
-                BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS;
-
-        if (!canAuthenticate) return;
-
-        // Revisar si hay sesión guardada
-        disposables.add(
-            sessionManager.getToken()
-                .take(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    token -> {
-                        if (!token.isEmpty()) {
-                            showBiometricPrompt();
-                        }
-                    },
-                    error -> { /* sin sesión, no mostramos biometría */ }
-                )
-        );
-    }
-
-    private void showBiometricPrompt() {
-        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Iniciar sesión con biometría")
-                .setSubtitle("Usá tu huella o Face ID para ingresar")
-                .setNegativeButtonText("Usar contraseña")
-                .build();
-
-        BiometricPrompt biometricPrompt = new BiometricPrompt(
-                this,
-                ContextCompat.getMainExecutor(requireContext()),
-                new BiometricPrompt.AuthenticationCallback() {
-                    @Override
-                    public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                        // Autenticación exitosa → navegar a Home sin re-login
-                        Navigation.findNavController(requireView())
-                                .navigate(R.id.action_login_to_home);
-                    }
-
-                    @Override
-                    public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                        // Usuario canceló o falló → dejar el formulario visible
-                    }
-
-                    @Override
-                    public void onAuthenticationFailed() {
-                        showError("Biometría no reconocida. Intentá de nuevo.");
-                    }
-                }
-        );
-
-        biometricPrompt.authenticate(promptInfo);
+        binding.tvRegisterLink.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_login_to_register));
     }
 
     private void attemptLogin() {
@@ -149,29 +73,14 @@ public class LoginFragment extends Fragment {
                     break;
                 case SUCCESS:
                     setLoading(false);
-                    com.uade.xplorenow.data.model.User loginUser = result.getData().getUser();
-                    Log.d("XploreNow", "Login SUCCESS — token=" + result.getData().getToken()
-                            + " user=" + loginUser);
-                    if (loginUser == null) {
-                        loginUser = new com.uade.xplorenow.data.model.User("", "", "", "user");
-                    }
-                    final com.uade.xplorenow.data.model.User finalUser = loginUser;
-                    disposables.add(
-                        sessionManager.saveSession(result.getData().getToken(), finalUser)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                prefs -> {
-                                    NavController navController = Navigation.findNavController(requireView());
-                                    navController.navigate(R.id.action_login_to_home);
-                                },
-                                error -> {
-                                    Log.e("XploreNow", "saveSession FAILED", error);
-                                    showError("Error al guardar sesión: "
-                                            + error.getClass().getSimpleName()
-                                            + " — " + error.getMessage());
-                                }
-                            )
-                    );
+                    User user = result.getData().getUser();
+                    String token = result.getData().getToken();
+                    if (user == null) user = new User("", "", "", "user");
+                    tokenManager.saveToken(token);
+                    tokenManager.saveUser(user.getId(), user.getName(),
+                            user.getEmail(), user.getRole());
+                    Log.d("XploreNow", "Login OK — user=" + user.getEmail());
+                    Navigation.findNavController(requireView()).navigate(R.id.action_login_to_home);
                     break;
                 case ERROR:
                     setLoading(false);
@@ -195,7 +104,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        disposables.clear();
         binding = null;
     }
 }

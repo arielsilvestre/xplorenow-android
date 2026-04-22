@@ -2,7 +2,8 @@ package com.uade.xplorenow.di;
 
 import android.content.Context;
 
-import com.uade.xplorenow.data.local.SessionManager;
+import com.uade.xplorenow.data.local.TokenManager;
+import com.uade.xplorenow.util.AuthEventBus;
 
 import javax.inject.Singleton;
 
@@ -18,7 +19,13 @@ public class SessionModule {
 
     @Provides
     @Singleton
-    public static SessionManager provideSessionManager(@ApplicationContext Context context) {
-        return new SessionManager(context);
+    public static TokenManager provideTokenManager(@ApplicationContext Context context) {
+        return new TokenManager(context);
+    }
+
+    @Provides
+    @Singleton
+    public static AuthEventBus provideAuthEventBus() {
+        return new AuthEventBus();
     }
 }

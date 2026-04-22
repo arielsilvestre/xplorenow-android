@@ -1,7 +1,8 @@
 package com.uade.xplorenow.di;
 
-import com.uade.xplorenow.data.local.SessionManager;
+import com.uade.xplorenow.data.local.TokenManager;
 import com.uade.xplorenow.data.remote.ApiService;
+import com.uade.xplorenow.util.AuthEventBus;
 
 import javax.inject.Singleton;
 
@@ -12,6 +13,7 @@ import dagger.hilt.components.SingletonComponent;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,21 +26,25 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public static OkHttpClient provideOkHttpClient(SessionManager sessionManager) {
+    public static OkHttpClient provideOkHttpClient(TokenManager tokenManager, AuthEventBus authEventBus) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request original = chain.request();
-                    String token = sessionManager.getCachedToken();
-                    if (token != null && !token.isEmpty()) {
-                        Request authenticated = original.newBuilder()
-                                .header("Authorization", "Bearer " + token)
-                                .build();
-                        return chain.proceed(authenticated);
+                    String token = tokenManager.getToken();
+                    Request request = token != null
+                            ? original.newBuilder()
+                                    .header("Authorization", "Bearer " + token)
+                                    .build()
+                            : original;
+                    Response response = chain.proceed(request);
+                    if (response.code() == 401) {
+                        tokenManager.clearAll();
+                        authEventBus.emitSessionExpired();
                     }
-                    return chain.proceed(original);
+                    return response;
                 })
                 .addInterceptor(logging)
                 .build();
