@@ -1,167 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@color/background">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Nueva reserva"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-            android:textColor="@color/primary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!-- Hero header -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@color/primary">
 
-        <!-- Nombre de la actividad (readonly) -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_activity"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:hint="Actividad"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Selector de fecha -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_date"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Fecha (YYYY-MM-DD)"
-            app:endIconMode="custom"
-            app:endIconDrawable="@android:drawable/ic_menu_my_calendar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_activity">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Cantidad de personas -->
-        <TextView
-            android:id="@+id/tv_people_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Cantidad de personas"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_date" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_people"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_people_label">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_decrease"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:text="−"
-                android:textSize="20sp"
-                android:padding="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_people_count"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                android:minWidth="60dp"
-                android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_increase"
-                app:layout_constraintStart_toEndOf="@id/btn_decrease"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_increase"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:text="+"
-                android:textSize="20sp"
-                android:padding="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📅"
+                    android:textSize="40sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Nueva reserva"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:textColor="@color/on_primary" />
 
-        <!-- Mensaje de error -->
-        <TextView
-            android:id="@+id/tv_error"
-            android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Completá los datos para reservar"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="@color/primary_container" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Form card que solapa el hero -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/error"
-            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_people" />
-
-        <!-- Progress -->
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_error" />
-
-        <!-- Botón confirmar -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_confirm"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="-28dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="32dp"
-            android:text="Confirmar reserva"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progress" />
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/surface">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Detalle de la reserva"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    android:textColor="@color/on_surface" />
+
+                <!-- Nombre de la actividad (readonly) -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_activity"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="Actividad">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Selector de fecha -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_date"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="Fecha (YYYY-MM-DD)"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@android:drawable/ic_menu_my_calendar">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Cantidad de personas -->
+                <TextView
+                    android:id="@+id/tv_people_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Cantidad de personas"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="@color/on_surface_variant" />
+
+                <LinearLayout
+                    android:id="@+id/cl_people"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_decrease"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:text="−"
+                        android:textSize="20sp"
+                        android:padding="0dp" />
+
+                    <TextView
+                        android:id="@+id/tv_people_count"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1"
+                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:gravity="center" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_increase"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:text="+"
+                        android:textSize="20sp"
+                        android:padding="0dp" />
+
+                </LinearLayout>
+
+                <!-- Mensaje de error -->
+                <TextView
+                    android:id="@+id/tv_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/error"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:visibility="gone" />
+
+                <!-- Progress -->
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
+
+                <!-- Botón confirmar -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Confirmar reserva"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

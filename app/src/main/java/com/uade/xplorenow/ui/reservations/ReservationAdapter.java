@@ -70,6 +70,8 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
                 default:          colorRes = R.color.status_pending;   break;
             }
             binding.chipStatus.setChipBackgroundColorResource(colorRes);
+            binding.viewStatusBar.setBackgroundColor(
+                    ContextCompat.getColor(binding.getRoot().getContext(), colorRes));
         }
 
         private String formatStatus(String status) {
