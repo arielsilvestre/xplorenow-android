@@ -64,6 +64,9 @@ public class ProfileFragment extends Fragment {
 
         binding.btnLogout.setOnClickListener(v -> viewModel.logout());
 
+        binding.btnBiometric.setOnClickListener(v ->
+                Navigation.findNavController(requireView()).navigate(R.id.action_profile_to_biometric));
+
         // Foto de perfil — abrir galería al tocar
         binding.ivProfilePhoto.setOnClickListener(v -> openGallery());
         binding.tvChangePhoto.setOnClickListener(v -> openGallery());
