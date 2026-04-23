@@ -25,6 +25,15 @@ public class Reservation {
     @SerializedName("activity")
     private TourActivity activity; // objeto anidado
 
+    /** Constructor para reconstruir una Reservation desde la caché local (Room). */
+    public Reservation(String id, String activityId, String date, int people, String status) {
+        this.id = id;
+        this.activityId = activityId;
+        this.date = date;
+        this.people = people;
+        this.status = status;
+    }
+
     public String getId() { return id; }
     public String getDate() { return date; }
     public int getPeople() { return people; }
