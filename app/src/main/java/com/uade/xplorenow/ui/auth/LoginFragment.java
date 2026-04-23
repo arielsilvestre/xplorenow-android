@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -43,9 +47,49 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
         binding.tvRegisterLink.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_login_to_register));
+
+        // Flujo bifurcado: si biometría activa y hay token encriptado → mostrar prompt directo
+        if (tokenManager.isBiometricEnabled() && tokenManager.getEncryptedToken() != null) {
+            showBiometricPrompt();
+        }
+    }
+
+    private void showBiometricPrompt() {
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("XploreNow")
+                .setSubtitle("Verificá tu identidad para continuar")
+                .setNegativeButtonText("Usar contraseña")
+                .build();
+
+        BiometricPrompt prompt = new BiometricPrompt(this,
+                ContextCompat.getMainExecutor(requireContext()),
+                new BiometricPrompt.AuthenticationCallback() {
+                    @Override
+                    public void onAuthenticationSucceeded(
+                            @NonNull BiometricPrompt.AuthenticationResult result) {
+                        String token = tokenManager.getEncryptedToken();
+                        tokenManager.saveToken(token);
+                        Navigation.findNavController(requireView())
+                                .navigate(R.id.action_login_to_home);
+                    }
+
+                    @Override
+                    public void onAuthenticationError(int errorCode,
+                                                      @NonNull CharSequence errString) {
+                        // Fallback — el formulario de credenciales ya está visible
+                    }
+
+                    @Override
+                    public void onAuthenticationFailed() {
+                        showError("Biometria no reconocida. Intentá de nuevo o usá tu contraseña.");
+                    }
+                });
+
+        prompt.authenticate(promptInfo);
     }
 
     private void attemptLogin() {
@@ -80,7 +124,7 @@ public class LoginFragment extends Fragment {
                     tokenManager.saveUser(user.getId(), user.getName(),
                             user.getEmail(), user.getRole());
                     Log.d("XploreNow", "Login OK — user=" + user.getEmail());
-                    Navigation.findNavController(requireView()).navigate(R.id.action_login_to_home);
+                    offerBiometricIfAvailable(token);
                     break;
                 case ERROR:
                     setLoading(false);
@@ -88,6 +132,29 @@ public class LoginFragment extends Fragment {
                     break;
             }
         });
+    }
+
+    private void offerBiometricIfAvailable(String token) {
+        BiometricManager manager = BiometricManager.from(requireContext());
+        boolean canAuth = manager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                == BiometricManager.BIOMETRIC_SUCCESS;
+
+        if (!canAuth || tokenManager.isBiometricEnabled()) {
+            Navigation.findNavController(requireView()).navigate(R.id.action_login_to_home);
+            return;
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Inicio rapido")
+                .setMessage("Queres activar el inicio con huella o Face ID para la proxima vez?")
+                .setPositiveButton("Activar", (dialog, which) -> {
+                    tokenManager.setBiometricEnabled(true);
+                    tokenManager.saveEncryptedToken(token);
+                    Navigation.findNavController(requireView()).navigate(R.id.action_login_to_home);
+                })
+                .setNegativeButton("Ahora no", (dialog, which) ->
+                        Navigation.findNavController(requireView()).navigate(R.id.action_login_to_home))
+                .show();
     }
 
     private void setLoading(boolean loading) {

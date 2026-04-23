@@ -80,6 +80,12 @@ public class ProfileFragment extends Fragment {
         // Cargar foto guardada si existe
         loadSavedPhoto();
 
+        binding.btnBiometric.setOnClickListener(v ->
+                Navigation.findNavController(requireView()).navigate(R.id.action_profile_to_biometric));
+
+        // Foto de perfil — abrir galería al tocar
+        binding.ivProfilePhoto.setOnClickListener(v -> openGallery());
+        binding.tvChangePhoto.setOnClickListener(v -> openGallery());
         // Botón biométrico — solo si existe en el layout (agregado en Task 2)
         if (binding.btnBiometric != null) {
             binding.btnBiometric.setOnClickListener(v ->
