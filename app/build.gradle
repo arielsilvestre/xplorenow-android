@@ -52,6 +52,10 @@ dependencies {
     // Glide (imágenes)
     implementation 'com.github.bumptech.glide:glide:4.16.0'
 
+    // Room (base de datos local / modo offline)
+    implementation 'androidx.room:room-runtime:2.6.1'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+
     // Security Crypto (EncryptedSharedPreferences para JWT biométrico)
     implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
