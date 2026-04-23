@@ -52,11 +52,11 @@ public class ReservationRepository {
                                            Response<ApiResponse<List<Reservation>>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             List<Reservation> reservations = response.body().getData();
-                            // Guardar en Room en background para soporte offline
-                            executor.execute(() -> {
+                            // Guardar en Room en background (en transacción para consistencia)
+                            executor.execute(() -> db.runInTransaction(() -> {
                                 db.reservationDao().deleteAll();
                                 db.reservationDao().insertAll(toEntities(reservations));
-                            });
+                            }));
                             result.setValue(Resource.success(reservations));
                         } else {
                             // API fallida: intentar cargar desde Room
@@ -125,8 +125,9 @@ public class ReservationRepository {
     }
 
     private ReservationEntity toEntity(Reservation r) {
+        if (r.getId() == null) return null;
         ReservationEntity entity = new ReservationEntity();
-        entity.id = r.getId() != null ? r.getId() : "";
+        entity.id = r.getId();
         entity.activityId = r.getActivityId();
         entity.activityName = (r.getActivity() != null) ? r.getActivity().getName() : null;
         entity.date = r.getDate();
@@ -140,7 +141,8 @@ public class ReservationRepository {
         List<ReservationEntity> entities = new ArrayList<>();
         if (reservations == null) return entities;
         for (Reservation r : reservations) {
-            entities.add(toEntity(r));
+            ReservationEntity entity = toEntity(r);
+            if (entity != null) entities.add(entity);
         }
         return entities;
     }
