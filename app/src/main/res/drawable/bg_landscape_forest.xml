@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Selva tropical: cielo azul → verde brillante → bosque profundo -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:type="linear"
+        android:angle="270"
+        android:startColor="#0288D1"
+        android:centerColor="#2E7D32"
+        android:endColor="#1B5E20" />
+</shape>

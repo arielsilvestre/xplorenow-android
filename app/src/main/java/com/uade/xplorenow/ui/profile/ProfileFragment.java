@@ -32,6 +32,10 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private ProfileViewModel viewModel;
 
+    // Launcher para abrir la galería
+    private final ActivityResultLauncher<String> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::onImagePicked);
+
     // Launcher para pedir permiso
     private final ActivityResultLauncher<String> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
@@ -39,10 +43,6 @@ public class ProfileFragment extends Fragment {
                     pickImageLauncher.launch("image/*");
                 }
             });
-
-    // Launcher para abrir la galería
-    private final ActivityResultLauncher<String> pickImageLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), this::onImagePicked);
 
     @Nullable
     @Override
@@ -82,16 +82,6 @@ public class ProfileFragment extends Fragment {
 
         binding.btnBiometric.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.action_profile_to_biometric));
-
-        // Foto de perfil — abrir galería al tocar
-        binding.ivProfilePhoto.setOnClickListener(v -> openGallery());
-        binding.tvChangePhoto.setOnClickListener(v -> openGallery());
-        // Botón biométrico — solo si existe en el layout (agregado en Task 2)
-        if (binding.btnBiometric != null) {
-            binding.btnBiometric.setOnClickListener(v ->
-                    Navigation.findNavController(requireView())
-                            .navigate(R.id.action_profile_to_biometric));
-        }
     }
 
     private void requestGalleryPermission() {

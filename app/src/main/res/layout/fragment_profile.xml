@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Header con color -->
+        <!-- Header con degradado oceánico -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:background="@color/primary" />
+            android:layout_height="160dp"
+            android:background="@drawable/bg_gradient_header" />
 
         <!-- Avatar centrado que solapa el header -->
         <LinearLayout
@@ -23,25 +23,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="-50dp">
+            android:layout_marginTop="-55dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_profile_photo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:src="@mipmap/ic_launcher"
                 android:scaleType="centerCrop"
                 android:clickable="true"
                 android:focusable="true"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Circle"
                 app:strokeColor="@color/surface"
-                app:strokeWidth="3dp" />
+                app:strokeWidth="4dp" />
 
             <TextView
                 android:id="@+id/tv_change_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:text="Cambiar foto"
                 android:textColor="@color/primary"
                 android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
@@ -49,7 +49,7 @@
                 android:focusable="true" />
         </LinearLayout>
 
-        <!-- Card con info del usuario -->
+        <!-- Card info del usuario -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_user_info"
             android:layout_width="match_parent"
@@ -57,8 +57,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardCornerRadius="20dp"
             app:cardBackgroundColor="@color/surface">
 
             <LinearLayout
@@ -86,7 +86,6 @@
                     android:textColor="@color/on_surface" />
 
                 <View
-                    android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="14dp"
@@ -113,33 +112,36 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Botón acceso biométrico -->
+        <!-- Botón acceso biométrico (outlined, primario) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_biometric"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp"
-            android:text="Acceso biometrico"
-            android:textAllCaps="false" />
+            android:text="Acceso biométrico"
+            android:textAllCaps="false"
+            app:cornerRadius="28dp"
+            app:strokeColor="@color/primary"
+            android:textColor="@color/primary" />
 
-        <!-- Botón cerrar sesión -->
+        <!-- Botón cerrar sesión (outlined, error) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logout"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="40dp"
             android:text="Cerrar sesión"
             android:textAllCaps="false"
             android:textColor="@color/error"
-            app:strokeColor="@color/error" />
-
+            app:strokeColor="@color/error"
+            app:cornerRadius="28dp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

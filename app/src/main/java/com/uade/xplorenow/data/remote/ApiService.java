@@ -1,5 +1,6 @@
 package com.uade.xplorenow.data.remote;
 
+import com.uade.xplorenow.data.model.Destination;
 import com.uade.xplorenow.data.model.Reservation;
 import com.uade.xplorenow.data.model.TourActivity;
 import com.uade.xplorenow.data.model.User;
@@ -28,6 +29,13 @@ public interface ApiService {
 
     @GET("api/v1/auth/me")
     Call<ApiResponse<User>> getMe();
+
+    // --- Destinations ---
+    @GET("api/v1/destinations")
+    Call<ApiResponse<List<Destination>>> getDestinations();
+
+    @GET("api/v1/destinations/{id}")
+    Call<ApiResponse<Destination>> getDestinationById(@Path("id") String id);
 
     // --- Activities ---
     @GET("api/v1/activities")

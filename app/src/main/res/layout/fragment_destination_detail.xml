@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Hero image -->
+            <ImageView
+                android:id="@+id/iv_destination_image"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_gradient_header" />
+
+            <!-- Info card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="-24dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Nombre -->
+                    <TextView
+                        android:id="@+id/tv_destination_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:textColor="@color/on_surface" />
+
+                    <!-- Coordenadas -->
+                    <LinearLayout
+                        android:id="@+id/ll_coordinates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_coordinates"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:chipBackgroundColor="@color/primary_container"
+                            android:textColor="@color/on_primary_container"
+                            app:chipMinHeight="28dp" />
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/outline_variant" />
+
+                    <!-- Descripción -->
+                    <TextView
+                        android:id="@+id/tv_destination_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:textColor="@color/on_surface_variant"
+                        android:lineSpacingExtra="4dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Progress -->
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

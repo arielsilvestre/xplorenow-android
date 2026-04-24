@@ -11,18 +11,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Banner de bienvenida -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Hero banner con degradado inmersivo -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/primary">
+            android:layout_height="220dp"
+            android:background="@drawable/bg_gradient_header">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:orientation="vertical"
                 android:padding="24dp">
 
@@ -30,37 +28,36 @@
                     android:id="@+id/tv_greeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="¡Bienvenido!"
+                    android:text="¡Bienvenido! 👋"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    android:textColor="@color/primary_container" />
+                    android:textColor="#CCF0F9FF" />
 
                 <TextView
-                    android:id="@+id/tv_app_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="XploreNow"
                     android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                    android:textColor="@color/on_primary" />
+                    android:textColor="#FFFFFF"
+                    android:letterSpacing="0.02" />
 
                 <TextView
-                    android:id="@+id/tv_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Explorá actividades y reservá tu próxima aventura"
+                    android:layout_marginTop="6dp"
+                    android:text="Explorá y reservá tu próxima aventura"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@color/primary_container" />
+                    android:textColor="#99F0F9FF" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
-        <!-- Sección: Explorá -->
+        <!-- Sección: ¿Qué querés hacer? -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="12dp"
             android:text="¿Qué querés hacer hoy?"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
@@ -76,8 +73,8 @@
             android:layout_marginBottom="12dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
             app:cardBackgroundColor="@color/surface">
 
             <LinearLayout
@@ -87,19 +84,21 @@
                 android:padding="20dp"
                 android:gravity="center_vertical">
 
+                <!-- Ícono con fondo degradado azul -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    app:cardCornerRadius="14dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:cardCornerRadius="16dp"
                     app:cardBackgroundColor="@color/primary_container"
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@android:drawable/ic_menu_compass"
-                        android:contentDescription="Actividades" />
+                        android:contentDescription="Actividades"
+                        android:tint="@color/primary" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <LinearLayout
@@ -121,7 +120,7 @@
                         android:id="@+id/tv_card_activities_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:text="Tours, excursiones y experiencias únicas"
                         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         android:textColor="@color/on_surface_variant" />
@@ -132,7 +131,8 @@
                     android:layout_height="20dp"
                     android:src="@android:drawable/ic_media_next"
                     android:contentDescription=""
-                    android:alpha="0.4" />
+                    android:tint="@color/primary"
+                    android:alpha="0.6" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -143,11 +143,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="28dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
             app:cardBackgroundColor="@color/surface">
 
             <LinearLayout
@@ -157,19 +157,21 @@
                 android:padding="20dp"
                 android:gravity="center_vertical">
 
+                <!-- Ícono con fondo teal -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    app:cardCornerRadius="14dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:cardCornerRadius="16dp"
                     app:cardBackgroundColor="@color/secondary_container"
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@android:drawable/ic_menu_agenda"
-                        android:contentDescription="Reservas" />
+                        android:contentDescription="Reservas"
+                        android:tint="@color/secondary" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <LinearLayout
@@ -191,7 +193,7 @@
                         android:id="@+id/tv_card_reservations_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:text="Gestioná tus reservas activas"
                         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         android:textColor="@color/on_surface_variant" />
@@ -202,7 +204,8 @@
                     android:layout_height="20dp"
                     android:src="@android:drawable/ic_media_next"
                     android:contentDescription=""
-                    android:alpha="0.4" />
+                    android:tint="@color/secondary"
+                    android:alpha="0.6" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
