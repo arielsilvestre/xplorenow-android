@@ -1,67 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/background">
+    android:background="@color/navy_deep">
 
+    <!-- Fondo: paisajes rotantes -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_landscapes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Scrim oscuro de abajo hacia arriba -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_login_scrim" />
+
+    <!-- Logo y tagline en la parte superior -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="72dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="XploreNow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="XploreNow"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
+            android:textColor="#FFFFFF"
+            android:letterSpacing="0.05" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Tu próxima aventura te espera"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="#CCF0F9FF" />
+    </LinearLayout>
+
+    <!-- Parte inferior: dots + form card + link -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:paddingBottom="28dp">
 
-        <!-- Hero header -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:background="@color/primary">
+        <!-- Indicadores de página (dots) -->
+        <LinearLayout
+            android:id="@+id/ll_dots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/iv_logo"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@mipmap/ic_launcher"
-                    android:contentDescription="XploreNow" />
-
-                <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="XploreNow"
-                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                    android:textColor="@color/on_primary" />
-
-                <TextView
-                    android:id="@+id/tv_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Tu próxima aventura te espera"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@color/primary_container" />
-            </LinearLayout>
-        </FrameLayout>
-
-        <!-- Form card que solapa el hero -->
+        <!-- Glass card con el form -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-28dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/surface">
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#33FFFFFF"
+            app:strokeColor="#4DFFFFFF"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,12 +91,13 @@
                     android:layout_height="wrap_content"
                     android:text="Iniciá sesión"
                     android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                    android:textColor="@color/on_surface" />
+                    android:textColor="#FFFFFF" />
 
                 <!-- Campo email -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_email"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:theme="@style/ThemeOverlay.XploreNow.DarkInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -90,13 +108,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
+                        android:textColor="#FFFFFF"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Campo password -->
+                <!-- Campo contraseña -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_password"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:theme="@style/ThemeOverlay.XploreNow.DarkInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -108,6 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
+                        android:textColor="#FFFFFF"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/error"
+                    android:textColor="#FFCDD2"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     android:visibility="gone" />
 
@@ -125,10 +146,13 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_login"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="52dp"
                     android:layout_marginTop="20dp"
                     android:text="Iniciar sesión"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                    app:backgroundTint="@color/secondary"
+                    app:cornerRadius="28dp" />
 
                 <!-- Progress -->
                 <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -138,8 +162,8 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="12dp"
                     android:indeterminate="true"
+                    app:indicatorColor="#FFFFFF"
                     android:visibility="gone" />
-
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -149,13 +173,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="16dp"
             android:text="¿No tenés cuenta? Registrate"
-            android:textColor="@color/primary"
+            android:textColor="#CCF0F9FF"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:clickable="true"
             android:focusable="true" />
-
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

@@ -32,4 +32,13 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <!-- Theme overlay para inputs sobre fondo oscuro (login glass card) -->
+    <style name="ThemeOverlay.XploreNow.DarkInput" parent="">
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorOutline">#80FFFFFF</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorOnSurfaceVariant">#AAFFFFFF</item>
+        <item name="android:textColorHint">#80FFFFFF</item>
+    </style>
 </resources>

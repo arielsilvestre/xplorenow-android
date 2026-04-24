@@ -1,10 +1,14 @@
 package com.uade.xplorenow.ui.auth;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.uade.xplorenow.R;
 import com.uade.xplorenow.data.local.TokenManager;
@@ -34,6 +39,21 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private AuthViewModel viewModel;
 
+    private final Handler autoScrollHandler = new Handler(Looper.getMainLooper());
+    private int currentPage = 0;
+    private static final int TOTAL_SLIDES = 5;
+    private static final long AUTO_SCROLL_DELAY_MS = 4000L;
+
+    private final Runnable autoScrollRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (binding == null) return;
+            currentPage = (currentPage + 1) % TOTAL_SLIDES;
+            binding.vpLandscapes.setCurrentItem(currentPage, true);
+            autoScrollHandler.postDelayed(this, AUTO_SCROLL_DELAY_MS);
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -48,13 +68,55 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
+        setupLandscapes();
+        setupDots();
+
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
         binding.tvRegisterLink.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_login_to_register));
 
-        // Flujo bifurcado: si biometría activa y hay token encriptado → mostrar prompt directo
         if (tokenManager.isBiometricEnabled() && tokenManager.getEncryptedToken() != null) {
             showBiometricPrompt();
+        }
+    }
+
+    private void setupLandscapes() {
+        binding.vpLandscapes.setAdapter(new LandscapeSlideAdapter());
+
+        binding.vpLandscapes.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                currentPage = position;
+                updateDots(position);
+            }
+        });
+
+        autoScrollHandler.postDelayed(autoScrollRunnable, AUTO_SCROLL_DELAY_MS);
+    }
+
+    private void setupDots() {
+        binding.llDots.removeAllViews();
+        int dotMarginDp = (int) (6 * getResources().getDisplayMetrics().density);
+
+        for (int i = 0; i < TOTAL_SLIDES; i++) {
+            ImageView dot = new ImageView(requireContext());
+            dot.setImageResource(i == 0 ? R.drawable.dot_active : R.drawable.dot_inactive);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(dotMarginDp / 2, 0, dotMarginDp / 2, 0);
+            dot.setLayoutParams(params);
+
+            binding.llDots.addView(dot);
+        }
+    }
+
+    private void updateDots(int activePosition) {
+        if (binding == null) return;
+        for (int i = 0; i < binding.llDots.getChildCount(); i++) {
+            ImageView dot = (ImageView) binding.llDots.getChildAt(i);
+            dot.setImageResource(i == activePosition ? R.drawable.dot_active : R.drawable.dot_inactive);
         }
     }
 
@@ -80,7 +142,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onAuthenticationError(int errorCode,
                                                       @NonNull CharSequence errString) {
-                        // Fallback — el formulario de credenciales ya está visible
+                        // Fallback — el formulario ya está visible
                     }
 
                     @Override
@@ -171,6 +233,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        autoScrollHandler.removeCallbacks(autoScrollRunnable);
         binding = null;
     }
 }
