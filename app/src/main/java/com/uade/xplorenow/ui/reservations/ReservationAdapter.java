@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.reservations;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -7,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.uade.xplorenow.R;
 import com.uade.xplorenow.data.model.Reservation;
 import com.uade.xplorenow.databinding.ItemReservationBinding;
@@ -50,9 +53,18 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         }
 
         void bind(Reservation reservation) {
-            // Nombre de la actividad
             if (reservation.getActivity() != null) {
                 binding.tvReservationActivity.setText(reservation.getActivity().getName());
+
+                // Thumbnail desde la imagen de la actividad
+                String imageUrl = reservation.getActivity().getImageUrl();
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    Glide.with(binding.getRoot().getContext())
+                            .load(imageUrl)
+                            .centerCrop()
+                            .placeholder(R.color.surface_variant)
+                            .into(binding.ivReservationThumb);
+                }
             } else {
                 binding.tvReservationActivity.setText("Actividad");
             }
@@ -60,26 +72,39 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             binding.tvReservationDate.setText(reservation.getDate());
             binding.tvReservationPeople.setText(reservation.getPeople() + " persona(s)");
 
-            // Estado con color
+            // Chip de estado: pill sutil con background tintado + texto coloreado
             String status = reservation.getStatus();
             binding.chipStatus.setText(formatStatus(status));
-            int colorRes;
+
+            int bgColor;
+            int textColor;
             switch (status != null ? status : "") {
-                case "confirmed": colorRes = R.color.status_confirmed; break;
-                case "cancelled": colorRes = R.color.status_cancelled; break;
-                default:          colorRes = R.color.status_pending;   break;
+                case "confirmed":
+                    bgColor   = Color.argb(30, 34, 197, 94);
+                    textColor = ContextCompat.getColor(
+                            binding.getRoot().getContext(), R.color.status_confirmed);
+                    break;
+                case "cancelled":
+                    bgColor   = Color.argb(30, 239, 68, 68);
+                    textColor = ContextCompat.getColor(
+                            binding.getRoot().getContext(), R.color.status_cancelled);
+                    break;
+                default:
+                    bgColor   = Color.argb(30, 255, 138, 0);
+                    textColor = ContextCompat.getColor(
+                            binding.getRoot().getContext(), R.color.status_pending);
+                    break;
             }
-            binding.chipStatus.setChipBackgroundColorResource(colorRes);
-            binding.viewStatusBar.setBackgroundColor(
-                    ContextCompat.getColor(binding.getRoot().getContext(), colorRes));
+            binding.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(bgColor));
+            binding.chipStatus.setTextColor(textColor);
         }
 
         private String formatStatus(String status) {
             if (status == null) return "Pendiente";
             switch (status) {
-                case "confirmed": return "Confirmada";
-                case "cancelled": return "Cancelada";
-                default:          return "Pendiente";
+                case "confirmed": return "● Confirmada";
+                case "cancelled": return "✕ Cancelada";
+                default:          return "◐ Pendiente";
             }
         }
     }

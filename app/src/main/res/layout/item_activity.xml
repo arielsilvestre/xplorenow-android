@@ -6,22 +6,24 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginBottom="14dp"
+    android:layout_marginBottom="12dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="3dp"
-    app:cardBackgroundColor="@color/surface">
+    app:cardCornerRadius="18dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/surface"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/outline">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Imagen con gradiente overlay al fondo -->
+        <!-- Imagen con badge de categoría -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="190dp">
+            android:layout_height="148dp">
 
             <ImageView
                 android:id="@+id/iv_activity_image"
@@ -30,62 +32,79 @@
                 android:scaleType="centerCrop"
                 android:background="@drawable/bg_gradient_header" />
 
-            <!-- Scrim sutil sobre la imagen para el chip -->
+            <!-- Overlay sutil al fondo -->
             <View
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="top"
-                android:background="#33000000" />
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_image_overlay" />
 
-            <!-- Chip categoría -->
+            <!-- Pill de categoría (color seteado dinámicamente en el adapter) -->
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                android:layout_margin="10dp"
                 android:textColor="#FFFFFF"
-                app:chipBackgroundColor="#CC1565C0"
-                app:chipMinHeight="28dp" />
+                android:textSize="10sp"
+                app:chipMinHeight="24dp"
+                app:chipStartPadding="8dp"
+                app:chipEndPadding="8dp"
+                app:ensureMinTouchTargetSize="false" />
         </FrameLayout>
 
-        <!-- Info -->
+        <!-- Contenido de la card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="14dp">
 
+            <!-- Nombre -->
             <TextView
                 android:id="@+id/tv_activity_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="@color/on_surface"
                 android:maxLines="2"
                 android:ellipsize="end" />
 
+            <!-- Precio + Capacidad -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical">
 
+                <!-- Precio prominente en naranja -->
                 <TextView
                     android:id="@+id/tv_activity_price"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                    android:textColor="@color/secondary" />
+                    android:textColor="@color/secondary"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/space_grotesk"
+                    android:textStyle="bold"
+                    android:letterSpacing="-0.02" />
 
+                <!-- Capacidad estilo monospace en chip sutil -->
                 <TextView
                     android:id="@+id/tv_activity_capacity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="@color/on_surface_variant" />
+                    android:fontFamily="@font/ibm_plex_mono"
+                    android:textSize="11sp"
+                    android:textColor="@color/on_surface_variant"
+                    android:background="@drawable/bg_capacity_chip"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
