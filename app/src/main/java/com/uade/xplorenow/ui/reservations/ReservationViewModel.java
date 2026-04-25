@@ -38,4 +38,8 @@ public class ReservationViewModel extends ViewModel {
     public LiveData<Resource<List<Reservation>>> getReservationHistory() {
         return repository.getReservationHistory();
     }
+
+    public LiveData<Resource<Reservation>> getReservationById(String id) {
+        return repository.getReservationById(id);
+    }
 }

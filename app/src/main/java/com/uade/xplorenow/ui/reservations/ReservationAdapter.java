@@ -21,8 +21,13 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         void onCancel(Reservation reservation);
     }
 
+    public interface OnVoucherListener {
+        void onViewVoucher(Reservation reservation);
+    }
+
     private List<Reservation> reservations = new ArrayList<>();
     private OnCancelListener cancelListener;
+    private OnVoucherListener voucherListener;
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations != null ? reservations : new ArrayList<>();
@@ -31,6 +36,10 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     public void setCancelListener(OnCancelListener listener) {
         this.cancelListener = listener;
+    }
+
+    public void setVoucherListener(OnVoucherListener listener) {
+        this.voucherListener = listener;
     }
 
     @NonNull
@@ -43,7 +52,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(reservations.get(position), cancelListener);
+        holder.bind(reservations.get(position), cancelListener, voucherListener);
     }
 
     @Override
@@ -59,7 +68,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             this.binding = binding;
         }
 
-        void bind(Reservation reservation, OnCancelListener cancelListener) {
+        void bind(Reservation reservation, OnCancelListener cancelListener, OnVoucherListener voucherListener) {
             if (reservation.getActivity() != null) {
                 binding.tvReservationActivity.setText(reservation.getActivity().getName());
             } else {
@@ -87,6 +96,15 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             if (canCancel) {
                 binding.btnCancelReservation.setOnClickListener(v -> {
                     if (cancelListener != null) cancelListener.onCancel(reservation);
+                });
+            }
+
+            // Botón voucher: solo para confirmed
+            boolean isConfirmed = "confirmed".equals(status);
+            binding.btnViewVoucher.setVisibility(isConfirmed ? View.VISIBLE : View.GONE);
+            if (isConfirmed) {
+                binding.btnViewVoucher.setOnClickListener(v -> {
+                    if (voucherListener != null) voucherListener.onViewVoucher(reservation);
                 });
             }
         }

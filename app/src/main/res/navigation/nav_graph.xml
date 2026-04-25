@@ -69,6 +69,15 @@
         android:label="Mis reservas">
         <action android:id="@+id/action_reservationList_to_create"
             app:destination="@id/reservationCreateFragment" />
+        <action android:id="@+id/action_reservationList_to_voucher"
+            app:destination="@id/voucherFragment" />
+    </fragment>
+
+    <fragment android:id="@+id/voucherFragment"
+        android:name="com.uade.xplorenow.ui.reservations.VoucherFragment"
+        android:label="Mi voucher">
+        <argument android:name="reservationId"
+            app:argType="string" />
     </fragment>
 
     <fragment android:id="@+id/reservationCreateFragment"

@@ -9,6 +9,8 @@ import com.uade.xplorenow.data.remote.dto.CreateReservationRequest;
 import com.uade.xplorenow.data.remote.dto.LoginRequest;
 import com.uade.xplorenow.data.remote.dto.LoginResponse;
 import com.uade.xplorenow.data.remote.dto.RegisterRequest;
+import com.uade.xplorenow.data.model.Review;
+import com.uade.xplorenow.data.remote.dto.CreateReviewRequest;
 import com.uade.xplorenow.data.remote.dto.FavoriteToggleRequest;
 import com.uade.xplorenow.data.remote.dto.UpdateUserRequest;
 
@@ -66,6 +68,10 @@ public interface ApiService {
 
     @PATCH("api/v1/reservations/{id}/cancel")
     Call<ApiResponse<Reservation>> cancelReservation(@Path("id") String id);
+
+    // --- Reviews ---
+    @POST("api/v1/reviews")
+    Call<ApiResponse<Review>> createReview(@Body CreateReviewRequest request);
 
     // --- Favorites ---
     @POST("api/v1/favorites/toggle")

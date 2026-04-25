@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.uade.xplorenow.R;
+import com.uade.xplorenow.data.model.TourActivity;
 import com.uade.xplorenow.databinding.FragmentActivityDetailBinding;
 import java.util.Locale;
 
@@ -52,23 +54,28 @@ public class ActivityDetailFragment extends Fragment {
                     binding.progress.setVisibility(View.GONE);
                     binding.btnReserve.setEnabled(true);
                     if (result.getData() != null) {
-                        binding.tvDetailName.setText(result.getData().getName());
+                        TourActivity act = result.getData();
+                        binding.tvDetailName.setText(act.getName());
                         binding.tvDetailPrice.setText(
-                                String.format(Locale.getDefault(), "$%.2f", result.getData().getPrice()));
+                                String.format(Locale.getDefault(), "$%.2f", act.getPrice()));
                         binding.tvDetailCapacity.setText(
-                                String.format(Locale.getDefault(), "%d personas", result.getData().getCapacity()));
+                                String.format(Locale.getDefault(), "%d personas", act.getCapacity()));
                         binding.tvDetailDescription.setText(
-                                result.getData().getDescription() != null
-                                        ? result.getData().getDescription()
-                                        : "Sin descripción disponible");
-                        binding.chipCategory.setText(result.getData().getCategory());
+                                act.getDescription() != null ? act.getDescription() : "Sin descripción disponible");
+                        binding.chipCategory.setText(act.getCategory());
 
-                        if (result.getData().getImageUrl() != null) {
+                        if (act.getImageUrl() != null) {
                             Glide.with(this)
-                                    .load(result.getData().getImageUrl())
+                                    .load(act.getImageUrl())
                                     .centerCrop()
                                     .into(binding.ivDetailImage);
                         }
+
+                        // C2 — info extendida
+                        bindExtendedInfo(act);
+
+                        // C1 — calificación
+                        setupReviewSection(activityId);
 
                         binding.btnReserve.setOnClickListener(v -> {
                             ActivityDetailFragmentDirections.ActionActivityDetailToReservationCreate action =
@@ -81,6 +88,72 @@ public class ActivityDetailFragment extends Fragment {
                     binding.progress.setVisibility(View.GONE);
                     break;
             }
+        });
+    }
+
+    private void bindExtendedInfo(TourActivity act) {
+        boolean anyVisible = false;
+
+        if (act.getDuration() != null && !act.getDuration().isEmpty()) {
+            binding.rowDuration.setVisibility(View.VISIBLE);
+            binding.tvDuration.setText(act.getDuration());
+            anyVisible = true;
+        }
+        if (act.getMeetingPoint() != null && !act.getMeetingPoint().isEmpty()) {
+            binding.rowMeetingPoint.setVisibility(View.VISIBLE);
+            binding.tvMeetingPoint.setText(act.getMeetingPoint());
+            anyVisible = true;
+        }
+        if (act.getWhatsIncluded() != null && !act.getWhatsIncluded().isEmpty()) {
+            binding.rowWhatsIncluded.setVisibility(View.VISIBLE);
+            binding.tvWhatsIncluded.setText(act.getWhatsIncluded());
+            anyVisible = true;
+        }
+        if (act.getCancellationPolicy() != null && !act.getCancellationPolicy().isEmpty()) {
+            binding.rowCancellation.setVisibility(View.VISIBLE);
+            binding.tvCancellationPolicy.setText(act.getCancellationPolicy());
+            anyVisible = true;
+        }
+
+        if (anyVisible) binding.cardExtraInfo.setVisibility(View.VISIBLE);
+    }
+
+    private void setupReviewSection(String activityId) {
+        binding.btnSubmitReview.setOnClickListener(v -> {
+            int stars = (int) binding.ratingBar.getRating();
+            if (stars == 0) {
+                Snackbar.make(binding.getRoot(), "Elegí al menos 1 estrella", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            String comment = binding.etReviewComment.getText() != null
+                    ? binding.etReviewComment.getText().toString().trim()
+                    : "";
+
+            viewModel.createReview(activityId, stars, comment).observe(getViewLifecycleOwner(), result -> {
+                switch (result.getStatus()) {
+                    case LOADING:
+                        binding.btnSubmitReview.setEnabled(false);
+                        break;
+                    case SUCCESS:
+                        binding.btnSubmitReview.setEnabled(true);
+                        binding.ratingBar.setRating(0);
+                        binding.etReviewComment.setText("");
+                        binding.tvReviewFeedback.setText("¡Gracias por tu calificación!");
+                        binding.tvReviewFeedback.setTextColor(
+                                androidx.core.content.ContextCompat.getColor(
+                                        requireContext(), R.color.status_confirmed));
+                        binding.tvReviewFeedback.setVisibility(View.VISIBLE);
+                        break;
+                    case ERROR:
+                        binding.btnSubmitReview.setEnabled(true);
+                        binding.tvReviewFeedback.setText(result.getMessage());
+                        binding.tvReviewFeedback.setTextColor(
+                                androidx.core.content.ContextCompat.getColor(
+                                        requireContext(), R.color.error));
+                        binding.tvReviewFeedback.setVisibility(View.VISIBLE);
+                        break;
+                }
+            });
         });
     }
 
