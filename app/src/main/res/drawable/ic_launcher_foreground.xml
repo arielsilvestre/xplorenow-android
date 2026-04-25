@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Ícono XploreNow: X formada por 2 rombos diagonales en verde Xplore -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Barra diagonal \ : desde esquina superior-izquierda a inferior-derecha -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M54,28 C54,28 72,48 72,60 C72,69.9 63.9,78 54,78 C44.1,78 36,69.9 36,60 C36,48 54,28 54,28 Z"/>
+        android:fillColor="#22C55E"
+        android:pathData="M24,24 L64,44 L84,84 L44,64 Z"/>
+
+    <!-- Barra diagonal / : desde esquina superior-derecha a inferior-izquierda -->
+    <path
+        android:fillColor="#22C55E"
+        android:pathData="M84,24 L64,64 L24,84 L44,44 Z"/>
+
 </vector>

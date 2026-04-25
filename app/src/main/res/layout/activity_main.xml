@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Banner sin conexión -->
+    <!-- Banner sin conexión (oculto por defecto, activado desde MainActivity) -->
     <TextView
         android:id="@+id/tv_offline_banner"
         android:layout_width="0dp"
@@ -21,6 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- El contenedor de fragments ocupa pantalla completa desde bajo el banner;
+         la nav flota encima. Los fragments tienen paddingBottom para no quedar tapados. -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -29,15 +31,22 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         app:layout_constraintTop_toBottomOf="@id/tv_offline_banner"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Barra de navegación cuadrada, ancho completo, pegada al fondo -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_nav"
+        android:elevation="12dp"
         app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/bottom_nav_icons"
+        app:itemTextColor="@color/bottom_nav_icons"
+        app:itemBackground="@android:color/transparent"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

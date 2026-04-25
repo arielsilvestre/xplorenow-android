@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Header degradado: azul océano → teal esmeralda (135°) -->
+<!-- Header degradado: Grafito profundo → verde xplore (135°) -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
         android:type="linear"
         android:angle="135"
-        android:startColor="#0D47A1"
-        android:centerColor="#1565C0"
-        android:endColor="#00695C" />
+        android:startColor="#111827"
+        android:centerColor="#1F2937"
+        android:endColor="#22C55E" />
 </shape>

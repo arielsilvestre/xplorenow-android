@@ -72,6 +72,9 @@ dependencies {
     // ViewPager2 (sliding landscapes on login)
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
 
+    // Splash Screen API (compat API 23+, nativo API 31+)
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+
     // Core
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'

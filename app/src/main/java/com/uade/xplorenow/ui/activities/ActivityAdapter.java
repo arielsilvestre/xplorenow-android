@@ -1,5 +1,7 @@
 package com.uade.xplorenow.ui.activities;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -63,7 +65,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         void bind(TourActivity activity) {
             binding.tvActivityName.setText(activity.getName());
             binding.tvActivityPrice.setText(
-                    String.format(Locale.getDefault(), "$%.2f", activity.getPrice()));
+                    String.format(Locale.getDefault(), "USD %.0f", activity.getPrice()));
+
+            // Cupos disponibles con color semafórico
             int spots = activity.getAvailableSpots();
             if (spots <= 0) {
                 binding.tvActivityCapacity.setText("Sin cupos");
@@ -76,17 +80,23 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                         ContextCompat.getColor(binding.getRoot().getContext(), R.color.status_pending));
             } else {
                 binding.tvActivityCapacity.setText(
-                        String.format(Locale.getDefault(), "%d cupos disponibles", spots));
+                        String.format(Locale.getDefault(), "%02d cupos disponibles", spots));
                 binding.tvActivityCapacity.setTextColor(
                         ContextCompat.getColor(binding.getRoot().getContext(), R.color.on_surface_variant));
             }
-            binding.chipCategory.setText(formatCategory(activity.getCategory()));
+
+            // Badge de categoría: texto + color según tipo
+            String category = activity.getCategory();
+            binding.chipCategory.setText(formatCategory(category));
+            binding.chipCategory.setChipBackgroundColor(
+                    ColorStateList.valueOf(getCategoryColor(category)));
+            binding.chipCategory.setTextColor(Color.WHITE);
 
             if (activity.getImageUrl() != null && !activity.getImageUrl().isEmpty()) {
                 Glide.with(binding.getRoot().getContext())
                         .load(activity.getImageUrl())
                         .centerCrop()
-                        .placeholder(R.drawable.ic_launcher_background)
+                        .placeholder(R.drawable.bg_gradient_header)
                         .into(binding.ivActivityImage);
             }
 
@@ -98,10 +108,21 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         private String formatCategory(String category) {
             if (category == null) return "Tour";
             switch (category) {
-                case "free_tour": return "Free Tour";
-                case "excursion": return "Excursión";
+                case "free_tour":  return "Free Tour";
+                case "excursion":  return "Excursión";
                 case "experience": return "Experiencia";
-                default: return "Tour";
+                default:           return "Tour";
+            }
+        }
+
+        /** Color ARGB del chip según categoría (aprox. 88% opacidad). */
+        private int getCategoryColor(String category) {
+            if (category == null) return Color.argb(224, 34, 197, 94);
+            switch (category) {
+                case "free_tour":  return Color.argb(204, 17,  24,  39); // grafito oscuro
+                case "excursion":  return Color.argb(224, 255, 138,  0); // naranja
+                case "experience": return Color.argb(224, 139, 92,  246); // violeta
+                default:           return Color.argb(224, 34,  197, 94); // verde
             }
         }
     }
