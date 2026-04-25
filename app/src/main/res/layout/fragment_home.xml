@@ -24,30 +24,31 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
+                <!-- Logo completo: isotipo + nombre -->
+                <ImageView
+                    android:layout_width="160dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/xplorenow_logo"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitStart"
+                    android:contentDescription="XploreNow" />
+
                 <TextView
                     android:id="@+id/tv_greeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:text="¡Bienvenido! 👋"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    android:textColor="#CCF0F9FF" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="XploreNow"
-                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                    android:textColor="#FFFFFF"
-                    android:letterSpacing="0.02" />
+                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                    android:textColor="#FFFFFF" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="4dp"
                     android:text="Explorá y reservá tu próxima aventura"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="#99F0F9FF" />
+                    android:textColor="#AAFFFFFF" />
             </LinearLayout>
         </FrameLayout>
 

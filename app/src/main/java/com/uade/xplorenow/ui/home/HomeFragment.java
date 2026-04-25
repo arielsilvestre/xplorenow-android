@@ -13,10 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.uade.xplorenow.R;
+import com.uade.xplorenow.data.local.TokenManager;
 import com.uade.xplorenow.databinding.FragmentHomeBinding;
+
+import javax.inject.Inject;
 
 @AndroidEntryPoint
 public class HomeFragment extends Fragment {
+
+    @Inject
+    TokenManager tokenManager;
 
     private FragmentHomeBinding binding;
 
@@ -32,6 +38,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        String name = tokenManager.getUserName();
+        String greeting = (name != null && !name.isEmpty())
+                ? "¡Bienvenido, " + name + "! 👋"
+                : "¡Bienvenido! 👋";
+        binding.tvGreeting.setText(greeting);
 
         binding.cardActivities.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.activityListFragment));
