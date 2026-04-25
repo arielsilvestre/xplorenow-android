@@ -60,10 +60,6 @@
             app:destination="@id/reservationCreateFragment" />
     </fragment>
 
-    <fragment android:id="@+id/guideListFragment"
-        android:name="com.uade.xplorenow.ui.guides.GuideListFragment"
-        android:label="Guías" />
-
     <fragment android:id="@+id/reservationListFragment"
         android:name="com.uade.xplorenow.ui.reservations.ReservationListFragment"
         android:label="Mis reservas">
