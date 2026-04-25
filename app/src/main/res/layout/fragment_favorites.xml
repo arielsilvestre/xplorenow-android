@@ -8,44 +8,25 @@
     android:background="@color/background">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/surface"
-        app:title="Mis Reservas"
-        app:titleTextAppearance="?attr/textAppearanceTitleLarge"
+        app:title="Mis favoritos"
+        app:navigationIcon="@drawable/ic_launcher_foreground"
+        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
         app:titleTextColor="@color/on_surface" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/surface"
-        app:tabTextColor="@color/on_surface_variant"
-        app:tabSelectedTextColor="@color/primary"
-        app:tabIndicatorColor="@color/primary">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Activas" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Historial" />
-    </com.google.android.material.tabs.TabLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_reservations"
+            android:id="@+id/rv_favorites"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="8dp"
-            android:paddingBottom="82dp"
+            android:paddingBottom="8dp"
             android:clipToPadding="false" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -61,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="No tenés reservas todavía"
+            android:text="No tenés actividades favoritas"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="@color/on_surface_variant"
             android:visibility="gone" />

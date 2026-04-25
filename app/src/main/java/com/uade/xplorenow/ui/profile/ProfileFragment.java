@@ -18,8 +18,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.uade.xplorenow.R;
+import com.uade.xplorenow.data.model.Reservation;
 import com.uade.xplorenow.databinding.FragmentProfileBinding;
+import com.uade.xplorenow.util.Resource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -63,7 +69,30 @@ public class ProfileFragment extends Fragment {
             if (user != null) {
                 binding.tvName.setText(user.getName() != null ? user.getName() : "—");
                 binding.tvEmail.setText(user.getEmail() != null ? user.getEmail() : "—");
+                // Restaurar chips de preferencias
+                if (user.getPreferences() != null) {
+                    binding.chipPrefTour.setChecked(user.getPreferences().contains("tour"));
+                    binding.chipPrefFreeTour.setChecked(user.getPreferences().contains("free_tour"));
+                    binding.chipPrefExcursion.setChecked(user.getPreferences().contains("excursion"));
+                    binding.chipPrefExperience.setChecked(user.getPreferences().contains("experience"));
+                }
             }
+        });
+
+        binding.btnSavePreferences.setOnClickListener(v -> {
+            List<String> selected = new ArrayList<>();
+            if (binding.chipPrefTour.isChecked()) selected.add("tour");
+            if (binding.chipPrefFreeTour.isChecked()) selected.add("free_tour");
+            if (binding.chipPrefExcursion.isChecked()) selected.add("excursion");
+            if (binding.chipPrefExperience.isChecked()) selected.add("experience");
+            viewModel.updatePreferences(selected);
+        });
+
+        viewModel.getPreferencesSaved().observe(getViewLifecycleOwner(), ok -> {
+            if (ok == null) return;
+            Snackbar.make(binding.getRoot(),
+                    ok ? "Preferencias guardadas" : "Error al guardar. Sin conexión.",
+                    Snackbar.LENGTH_SHORT).show();
         });
 
         viewModel.getLoggedOut().observe(getViewLifecycleOwner(), loggedOut -> {
@@ -82,6 +111,28 @@ public class ProfileFragment extends Fragment {
 
         binding.btnBiometric.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.action_profile_to_biometric));
+
+        binding.btnFavorites.setOnClickListener(v ->
+                Navigation.findNavController(requireView()).navigate(R.id.action_profile_to_favorites));
+
+        loadReservationSummary();
+    }
+
+    private void loadReservationSummary() {
+        viewModel.getMyReservations().observe(getViewLifecycleOwner(), result -> {
+            if (result.getStatus() != Resource.Status.SUCCESS || result.getData() == null) return;
+
+            List<Reservation> list = result.getData();
+            int total = list.size();
+            int confirmed = 0, cancelled = 0;
+            for (Reservation r : list) {
+                if ("confirmed".equals(r.getStatus())) confirmed++;
+                else if ("cancelled".equals(r.getStatus())) cancelled++;
+            }
+            binding.tvReservationsTotal.setText(String.valueOf(total));
+            binding.tvReservationsConfirmed.setText(String.valueOf(confirmed));
+            binding.tvReservationsCancelled.setText(String.valueOf(cancelled));
+        });
     }
 
     private void requestGalleryPermission() {

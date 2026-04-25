@@ -3,6 +3,7 @@ package com.uade.xplorenow.ui.reservations;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -19,11 +20,29 @@ import java.util.List;
 
 public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.ViewHolder> {
 
+    public interface OnCancelListener {
+        void onCancel(Reservation reservation);
+    }
+
+    public interface OnVoucherListener {
+        void onViewVoucher(Reservation reservation);
+    }
+
     private List<Reservation> reservations = new ArrayList<>();
+    private OnCancelListener cancelListener;
+    private OnVoucherListener voucherListener;
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations != null ? reservations : new ArrayList<>();
         notifyDataSetChanged();
+    }
+
+    public void setCancelListener(OnCancelListener listener) {
+        this.cancelListener = listener;
+    }
+
+    public void setVoucherListener(OnVoucherListener listener) {
+        this.voucherListener = listener;
     }
 
     @NonNull
@@ -36,7 +55,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(reservations.get(position));
+        holder.bind(reservations.get(position), cancelListener, voucherListener);
     }
 
     @Override
@@ -52,7 +71,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             this.binding = binding;
         }
 
-        void bind(Reservation reservation) {
+        void bind(Reservation reservation, OnCancelListener cancelListener, OnVoucherListener voucherListener) {
             if (reservation.getActivity() != null) {
                 binding.tvReservationActivity.setText(reservation.getActivity().getName());
 
@@ -97,6 +116,24 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             }
             binding.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(bgColor));
             binding.chipStatus.setTextColor(textColor);
+
+            // Botón cancelar: solo visible para pending y confirmed
+            boolean canCancel = "pending".equals(status) || "confirmed".equals(status);
+            binding.btnCancelReservation.setVisibility(canCancel ? View.VISIBLE : View.GONE);
+            if (canCancel) {
+                binding.btnCancelReservation.setOnClickListener(v -> {
+                    if (cancelListener != null) cancelListener.onCancel(reservation);
+                });
+            }
+
+            // Botón voucher: solo para confirmed
+            boolean isConfirmed = "confirmed".equals(status);
+            binding.btnViewVoucher.setVisibility(isConfirmed ? View.VISIBLE : View.GONE);
+            if (isConfirmed) {
+                binding.btnViewVoucher.setOnClickListener(v -> {
+                    if (voucherListener != null) voucherListener.onViewVoucher(reservation);
+                });
+            }
         }
 
         private String formatStatus(String status) {

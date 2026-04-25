@@ -9,14 +9,20 @@ import com.uade.xplorenow.data.remote.dto.CreateReservationRequest;
 import com.uade.xplorenow.data.remote.dto.LoginRequest;
 import com.uade.xplorenow.data.remote.dto.LoginResponse;
 import com.uade.xplorenow.data.remote.dto.RegisterRequest;
+import com.uade.xplorenow.data.model.Review;
+import com.uade.xplorenow.data.remote.dto.CreateReviewRequest;
+import com.uade.xplorenow.data.remote.dto.FavoriteToggleRequest;
+import com.uade.xplorenow.data.remote.dto.UpdateUserRequest;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -30,6 +36,9 @@ public interface ApiService {
     @GET("api/v1/auth/me")
     Call<ApiResponse<User>> getMe();
 
+    @PATCH("api/v1/users/me")
+    Call<ApiResponse<User>> updateMe(@Body UpdateUserRequest request);
+
     // --- Destinations ---
     @GET("api/v1/destinations")
     Call<ApiResponse<List<Destination>>> getDestinations();
@@ -38,6 +47,9 @@ public interface ApiService {
     Call<ApiResponse<Destination>> getDestinationById(@Path("id") String id);
 
     // --- Activities ---
+    @GET("api/v1/activities")
+    Call<ApiResponse<List<TourActivity>>> getActivities(@Query("category") String category);
+
     @GET("api/v1/activities")
     Call<ApiResponse<List<TourActivity>>> getActivities();
 
@@ -48,6 +60,23 @@ public interface ApiService {
     @GET("api/v1/reservations/me")
     Call<ApiResponse<List<Reservation>>> getMyReservations();
 
+    @GET("api/v1/reservations/history")
+    Call<ApiResponse<List<Reservation>>> getReservationHistory();
+
     @POST("api/v1/reservations")
     Call<ApiResponse<Reservation>> createReservation(@Body CreateReservationRequest request);
+
+    @PATCH("api/v1/reservations/{id}/cancel")
+    Call<ApiResponse<Reservation>> cancelReservation(@Path("id") String id);
+
+    // --- Reviews ---
+    @POST("api/v1/reviews")
+    Call<ApiResponse<Review>> createReview(@Body CreateReviewRequest request);
+
+    // --- Favorites ---
+    @POST("api/v1/favorites/toggle")
+    Call<ApiResponse<Void>> toggleFavorite(@Body FavoriteToggleRequest request);
+
+    @GET("api/v1/favorites/me")
+    Call<ApiResponse<List<TourActivity>>> getMyFavorites();
 }

@@ -1,7 +1,13 @@
 package com.uade.xplorenow;
 
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
@@ -67,5 +73,34 @@ public class MainActivity extends AppCompatActivity {
                                 .build());
             }
         });
+
+        setupOfflineBanner();
+    }
+
+    private void setupOfflineBanner() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(@NonNull Network network) {
+                runOnUiThread(() -> binding.tvOfflineBanner.setVisibility(View.GONE));
+            }
+
+            @Override
+            public void onLost(@NonNull Network network) {
+                runOnUiThread(() -> binding.tvOfflineBanner.setVisibility(View.VISIBLE));
+            }
+        };
+        NetworkRequest request = new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build();
+        cm.registerNetworkCallback(request, callback);
+
+        // Estado inicial
+        Network activeNetwork = cm.getActiveNetwork();
+        boolean connected = activeNetwork != null &&
+                cm.getNetworkCapabilities(activeNetwork) != null &&
+                cm.getNetworkCapabilities(activeNetwork)
+                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        binding.tvOfflineBanner.setVisibility(connected ? View.GONE : View.VISIBLE);
     }
 }

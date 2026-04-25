@@ -74,6 +74,57 @@ public class ReservationRepository {
         return result;
     }
 
+    public LiveData<Resource<List<Reservation>>> getReservationHistory() {
+        MutableLiveData<Resource<List<Reservation>>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading());
+        apiService.getReservationHistory()
+                .enqueue(new Callback<ApiResponse<List<Reservation>>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<List<Reservation>>> call,
+                                           Response<ApiResponse<List<Reservation>>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            result.setValue(Resource.success(response.body().getData()));
+                        } else {
+                            result.setValue(Resource.error("Error al cargar historial"));
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ApiResponse<List<Reservation>>> call, Throwable t) {
+                        result.setValue(Resource.error("Sin conexión."));
+                    }
+                });
+        return result;
+    }
+
+    public LiveData<Resource<Reservation>> cancelReservation(String reservationId) {
+        MutableLiveData<Resource<Reservation>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading());
+        apiService.cancelReservation(reservationId)
+                .enqueue(new Callback<ApiResponse<Reservation>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<Reservation>> call,
+                                           Response<ApiResponse<Reservation>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Reservation reservation = response.body().getData();
+                            executor.execute(() -> {
+                                ReservationEntity entity = toEntity(reservation);
+                                if (entity != null)
+                                    db.reservationDao().insertAll(Collections.singletonList(entity));
+                            });
+                            result.setValue(Resource.success(reservation));
+                        } else {
+                            result.setValue(Resource.error("Error al cancelar la reserva"));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<Reservation>> call, Throwable t) {
+                        result.setValue(Resource.error("Sin conexión. No se pudo cancelar."));
+                    }
+                });
+        return result;
+    }
+
     public LiveData<Resource<Reservation>> createReservation(String activityId, String date, int people) {
         MutableLiveData<Resource<Reservation>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
@@ -105,6 +156,22 @@ public class ReservationRepository {
                     }
                 });
 
+        return result;
+    }
+
+    public LiveData<Resource<Reservation>> getReservationById(String id) {
+        MutableLiveData<Resource<Reservation>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading());
+        executor.execute(() -> {
+            ReservationEntity entity = db.reservationDao().getById(id);
+            mainHandler.post(() -> {
+                if (entity != null) {
+                    result.setValue(Resource.success(fromEntity(entity)));
+                } else {
+                    result.setValue(Resource.error("No se encontró la reserva"));
+                }
+            });
+        });
         return result;
     }
 
