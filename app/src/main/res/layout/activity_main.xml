@@ -22,16 +22,14 @@
     <!-- Barra de navegación flotante: píldora oscura sobre el contenido -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:background="@drawable/bg_bottom_nav"
         android:elevation="12dp"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/bottom_nav_icons"
         app:itemTextColor="@color/bottom_nav_icons"
         app:itemBackground="@android:color/transparent"
-        app:activeIndicatorColor="#2622C55E"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
