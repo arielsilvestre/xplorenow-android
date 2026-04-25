@@ -1,6 +1,7 @@
 package com.uade.xplorenow.ui.reservations;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,11 +17,20 @@ import java.util.List;
 
 public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.ViewHolder> {
 
+    public interface OnCancelListener {
+        void onCancel(Reservation reservation);
+    }
+
     private List<Reservation> reservations = new ArrayList<>();
+    private OnCancelListener cancelListener;
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations != null ? reservations : new ArrayList<>();
         notifyDataSetChanged();
+    }
+
+    public void setCancelListener(OnCancelListener listener) {
+        this.cancelListener = listener;
     }
 
     @NonNull
@@ -33,7 +43,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(reservations.get(position));
+        holder.bind(reservations.get(position), cancelListener);
     }
 
     @Override
@@ -49,8 +59,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             this.binding = binding;
         }
 
-        void bind(Reservation reservation) {
-            // Nombre de la actividad
+        void bind(Reservation reservation, OnCancelListener cancelListener) {
             if (reservation.getActivity() != null) {
                 binding.tvReservationActivity.setText(reservation.getActivity().getName());
             } else {
@@ -60,7 +69,6 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             binding.tvReservationDate.setText(reservation.getDate());
             binding.tvReservationPeople.setText(reservation.getPeople() + " persona(s)");
 
-            // Estado con color
             String status = reservation.getStatus();
             binding.chipStatus.setText(formatStatus(status));
             int colorRes;
@@ -72,6 +80,15 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             binding.chipStatus.setChipBackgroundColorResource(colorRes);
             binding.viewStatusBar.setBackgroundColor(
                     ContextCompat.getColor(binding.getRoot().getContext(), colorRes));
+
+            // Botón cancelar: solo visible para pending y confirmed
+            boolean canCancel = "pending".equals(status) || "confirmed".equals(status);
+            binding.btnCancelReservation.setVisibility(canCancel ? View.VISIBLE : View.GONE);
+            if (canCancel) {
+                binding.btnCancelReservation.setOnClickListener(v -> {
+                    if (cancelListener != null) cancelListener.onCancel(reservation);
+                });
+            }
         }
 
         private String formatStatus(String status) {

@@ -74,6 +74,18 @@
                 android:layout_marginTop="2dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@color/on_surface_variant" />
+
+            <!-- Botón cancelar (solo visible para pending/confirmed) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancel_reservation"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Cancelar reserva"
+                android:textColor="@color/status_cancelled"
+                app:strokeColor="@color/status_cancelled"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

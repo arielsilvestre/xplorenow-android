@@ -27,6 +27,10 @@ public class ActivityViewModel extends ViewModel {
         return repository.getActivities();
     }
 
+    public LiveData<Resource<List<TourActivity>>> getActivitiesFiltered(String category) {
+        return repository.getActivities(category);
+    }
+
     public LiveData<Resource<TourActivity>> getActivityById(String id) {
         return repository.getActivityById(id);
     }

@@ -5,6 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Banner sin conexión -->
+    <TextView
+        android:id="@+id/tv_offline_banner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sin conexión — mostrando datos guardados"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+        android:textColor="#FFFFFF"
+        android:background="#CC212121"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -12,7 +28,7 @@
         android:layout_height="0dp"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_offline_banner"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

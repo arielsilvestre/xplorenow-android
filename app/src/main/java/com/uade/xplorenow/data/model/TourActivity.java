@@ -35,6 +35,21 @@ public class TourActivity {
     @SerializedName("guideId")
     private String guideId;
 
+    @SerializedName("availableSpots")
+    private int availableSpots;
+
+    @SerializedName("duration")
+    private String duration;
+
+    @SerializedName("meetingPoint")
+    private String meetingPoint;
+
+    @SerializedName("whatsIncluded")
+    private String whatsIncluded;
+
+    @SerializedName("cancellationPolicy")
+    private String cancellationPolicy;
+
     public String getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
@@ -44,4 +59,9 @@ public class TourActivity {
     public String getCategory() { return category; }
     public String getDestinationId() { return destinationId; }
     public String getGuideId() { return guideId; }
+    public int getAvailableSpots() { return availableSpots; }
+    public String getDuration() { return duration; }
+    public String getMeetingPoint() { return meetingPoint; }
+    public String getWhatsIncluded() { return whatsIncluded; }
+    public String getCancellationPolicy() { return cancellationPolicy; }
 }

@@ -28,13 +28,20 @@ public class ActivityRepository {
     }
 
     public LiveData<Resource<List<TourActivity>>> getActivities() {
+        return getActivities(null);
+    }
+
+    public LiveData<Resource<List<TourActivity>>> getActivities(String category) {
         MutableLiveData<Resource<List<TourActivity>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
 
-        apiService.getActivities()
-                .enqueue(new Callback<ApiResponse<List<TourActivity>>>() {
+        Call<ApiResponse<List<TourActivity>>> call = (category != null && !category.isEmpty())
+                ? apiService.getActivities(category)
+                : apiService.getActivities();
+
+        call.enqueue(new Callback<ApiResponse<List<TourActivity>>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<List<TourActivity>>> call,
+                    public void onResponse(Call<ApiResponse<List<TourActivity>>> c,
                                            Response<ApiResponse<List<TourActivity>>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             result.setValue(Resource.success(response.body().getData()));
@@ -44,7 +51,7 @@ public class ActivityRepository {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<List<TourActivity>>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<TourActivity>>> c, Throwable t) {
                         result.setValue(Resource.error("Sin conexión. Verificá tu red."));
                     }
                 });

@@ -2,6 +2,8 @@ package com.uade.xplorenow.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class User {
     @SerializedName("id")
     private String id;
@@ -15,6 +17,9 @@ public class User {
     @SerializedName("role")
     private String role;
 
+    @SerializedName("preferences")
+    private List<String> preferences;
+
     public User(String id, String name, String email, String role) {
         this.id = id;
         this.name = name;
@@ -26,4 +31,5 @@ public class User {
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getRole() { return role; }
+    public List<String> getPreferences() { return preferences; }
 }
