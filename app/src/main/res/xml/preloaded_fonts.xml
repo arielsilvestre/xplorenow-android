@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pre-carga las fuentes al arrancar la app para evitar FOUT en primera pantalla -->
+<preloaded-fonts xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font app:preloaded="@font/space_grotesk" />
+    <font app:preloaded="@font/inter" />
+    <font app:preloaded="@font/ibm_plex_mono" />
+</preloaded-fonts>
