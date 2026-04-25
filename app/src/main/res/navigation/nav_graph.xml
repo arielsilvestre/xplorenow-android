@@ -87,6 +87,15 @@
             app:popUpToInclusive="true" />
         <action android:id="@+id/action_profile_to_biometric"
             app:destination="@id/biometricFragment" />
+        <action android:id="@+id/action_profile_to_favorites"
+            app:destination="@id/favoritesFragment" />
+    </fragment>
+
+    <fragment android:id="@+id/favoritesFragment"
+        android:name="com.uade.xplorenow.ui.favorites.FavoritesFragment"
+        android:label="Mis favoritos">
+        <action android:id="@+id/action_favorites_to_detail"
+            app:destination="@id/activityDetailFragment" />
     </fragment>
 
     <fragment android:id="@+id/biometricFragment"

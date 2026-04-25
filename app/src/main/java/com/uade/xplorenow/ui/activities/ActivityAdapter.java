@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -63,8 +64,22 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             binding.tvActivityName.setText(activity.getName());
             binding.tvActivityPrice.setText(
                     String.format(Locale.getDefault(), "$%.2f", activity.getPrice()));
-            binding.tvActivityCapacity.setText(
-                    String.format(Locale.getDefault(), "%d personas", activity.getCapacity()));
+            int spots = activity.getAvailableSpots();
+            if (spots <= 0) {
+                binding.tvActivityCapacity.setText("Sin cupos");
+                binding.tvActivityCapacity.setTextColor(
+                        ContextCompat.getColor(binding.getRoot().getContext(), R.color.status_cancelled));
+            } else if (spots <= 5) {
+                binding.tvActivityCapacity.setText(
+                        String.format(Locale.getDefault(), "¡Últimos %d cupos!", spots));
+                binding.tvActivityCapacity.setTextColor(
+                        ContextCompat.getColor(binding.getRoot().getContext(), R.color.status_pending));
+            } else {
+                binding.tvActivityCapacity.setText(
+                        String.format(Locale.getDefault(), "%d cupos disponibles", spots));
+                binding.tvActivityCapacity.setTextColor(
+                        ContextCompat.getColor(binding.getRoot().getContext(), R.color.on_surface_variant));
+            }
             binding.chipCategory.setText(formatCategory(activity.getCategory()));
 
             if (activity.getImageUrl() != null && !activity.getImageUrl().isEmpty()) {

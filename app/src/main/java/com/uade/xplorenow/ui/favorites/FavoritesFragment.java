@@ -1,6 +1,4 @@
-package com.uade.xplorenow.ui.activities;
-
-import dagger.hilt.android.AndroidEntryPoint;
+package com.uade.xplorenow.ui.favorites;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,14 +12,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.uade.xplorenow.R;
-import com.uade.xplorenow.databinding.FragmentActivityListBinding;
+import com.uade.xplorenow.ui.activities.ActivityAdapter;
+import com.uade.xplorenow.ui.activities.ActivityListFragmentDirections;
+import com.uade.xplorenow.databinding.FragmentFavoritesBinding;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ActivityListFragment extends Fragment {
+public class FavoritesFragment extends Fragment {
 
-    private FragmentActivityListBinding binding;
-    private ActivityViewModel viewModel;
+    private FragmentFavoritesBinding binding;
+    private FavoriteViewModel viewModel;
     private ActivityAdapter adapter;
 
     @Nullable
@@ -29,7 +30,7 @@ public class ActivityListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentActivityListBinding.inflate(inflater, container, false);
+        binding = FragmentFavoritesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -37,31 +38,21 @@ public class ActivityListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(this).get(ActivityViewModel.class);
+        viewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
 
         adapter = new ActivityAdapter(activity -> {
-            ActivityListFragmentDirections.ActionActivityListToDetail action =
-                    ActivityListFragmentDirections.actionActivityListToDetail(activity.getId());
+            FavoritesFragmentDirections.ActionFavoritesToDetail action =
+                    FavoritesFragmentDirections.actionFavoritesToDetail(activity.getId());
             Navigation.findNavController(view).navigate(action);
         });
 
-        binding.rvActivities.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.rvActivities.setAdapter(adapter);
+        binding.rvFavorites.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvFavorites.setAdapter(adapter);
 
-        loadActivities(null);
+        binding.toolbar.setNavigationOnClickListener(v ->
+                Navigation.findNavController(view).navigateUp());
 
-        binding.chipGroupFilter.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            String category = null;
-            if (checkedIds.contains(R.id.chip_filter_tour)) category = "tour";
-            else if (checkedIds.contains(R.id.chip_filter_free_tour)) category = "free_tour";
-            else if (checkedIds.contains(R.id.chip_filter_excursion)) category = "excursion";
-            else if (checkedIds.contains(R.id.chip_filter_experience)) category = "experience";
-            loadActivities(category);
-        });
-    }
-
-    private void loadActivities(String category) {
-        viewModel.getActivitiesFiltered(category).observe(getViewLifecycleOwner(), result -> {
+        viewModel.getMyFavorites().observe(getViewLifecycleOwner(), result -> {
             switch (result.getStatus()) {
                 case LOADING:
                     binding.progress.setVisibility(View.VISIBLE);
