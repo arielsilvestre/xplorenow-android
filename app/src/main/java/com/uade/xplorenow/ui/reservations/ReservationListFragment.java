@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -44,6 +45,11 @@ public class ReservationListFragment extends Fragment {
 
         adapter = new ReservationAdapter();
         adapter.setCancelListener(this::confirmCancel);
+        adapter.setVoucherListener(reservation -> {
+            ReservationListFragmentDirections.ActionReservationListToVoucher action =
+                    ReservationListFragmentDirections.actionReservationListToVoucher(reservation.getId());
+            Navigation.findNavController(requireView()).navigate(action);
+        });
         binding.rvReservations.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvReservations.setAdapter(adapter);
 

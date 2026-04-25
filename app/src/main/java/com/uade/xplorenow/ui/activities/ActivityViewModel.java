@@ -3,8 +3,10 @@ package com.uade.xplorenow.ui.activities;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.uade.xplorenow.data.model.Review;
 import com.uade.xplorenow.data.model.TourActivity;
 import com.uade.xplorenow.data.repository.ActivityRepository;
+import com.uade.xplorenow.data.repository.ReviewRepository;
 import com.uade.xplorenow.util.Resource;
 
 import java.util.List;
@@ -17,10 +19,12 @@ import javax.inject.Inject;
 public class ActivityViewModel extends ViewModel {
 
     private final ActivityRepository repository;
+    private final ReviewRepository reviewRepository;
 
     @Inject
-    public ActivityViewModel(ActivityRepository repository) {
+    public ActivityViewModel(ActivityRepository repository, ReviewRepository reviewRepository) {
         this.repository = repository;
+        this.reviewRepository = reviewRepository;
     }
 
     public LiveData<Resource<List<TourActivity>>> getActivities() {
@@ -33,5 +37,9 @@ public class ActivityViewModel extends ViewModel {
 
     public LiveData<Resource<TourActivity>> getActivityById(String id) {
         return repository.getActivityById(id);
+    }
+
+    public LiveData<Resource<Review>> createReview(String activityId, int stars, String comment) {
+        return reviewRepository.createReview(activityId, stars, comment);
     }
 }

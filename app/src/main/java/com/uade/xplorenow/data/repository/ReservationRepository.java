@@ -159,6 +159,22 @@ public class ReservationRepository {
         return result;
     }
 
+    public LiveData<Resource<Reservation>> getReservationById(String id) {
+        MutableLiveData<Resource<Reservation>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading());
+        executor.execute(() -> {
+            ReservationEntity entity = db.reservationDao().getById(id);
+            mainHandler.post(() -> {
+                if (entity != null) {
+                    result.setValue(Resource.success(fromEntity(entity)));
+                } else {
+                    result.setValue(Resource.error("No se encontró la reserva"));
+                }
+            });
+        });
+        return result;
+    }
+
     // --- Helpers: mappers ---
 
     private void loadFromRoom(MutableLiveData<Resource<List<Reservation>>> result) {

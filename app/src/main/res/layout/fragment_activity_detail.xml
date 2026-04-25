@@ -105,6 +105,203 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Card de info extra: duración, punto de encuentro, qué incluye, política -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_extra_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Duración -->
+                    <LinearLayout
+                        android:id="@+id/row_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Duración"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                            android:textColor="@color/on_surface_variant" />
+
+                        <TextView
+                            android:id="@+id/tv_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="@color/on_surface" />
+                    </LinearLayout>
+
+                    <!-- Punto de encuentro -->
+                    <LinearLayout
+                        android:id="@+id/row_meeting_point"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Punto de encuentro"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                            android:textColor="@color/on_surface_variant" />
+
+                        <TextView
+                            android:id="@+id/tv_meeting_point"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="@color/on_surface"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+                    </LinearLayout>
+
+                    <!-- Qué incluye -->
+                    <LinearLayout
+                        android:id="@+id/row_whats_included"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="12dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="¿Qué incluye?"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                            android:textColor="@color/on_surface_variant"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tv_whats_included"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="@color/on_surface"
+                            android:lineSpacingExtra="2dp" />
+                    </LinearLayout>
+
+                    <!-- Política de cancelación -->
+                    <LinearLayout
+                        android:id="@+id/row_cancellation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Política de cancelación"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                            android:textColor="@color/on_surface_variant"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tv_cancellation_policy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="@color/on_surface"
+                            android:lineSpacingExtra="2dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card para dejar una calificación -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calificá esta actividad"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                        android:textColor="@color/on_surface"
+                        android:layout_marginBottom="12dp" />
+
+                    <RatingBar
+                        android:id="@+id/rating_bar"
+                        style="@style/Widget.AppCompat.RatingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="1"
+                        android:rating="0"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Escribí tu comentario (opcional)"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_review_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="3"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:maxLength="300" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_submit_review"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Enviar calificación"
+                        android:textAllCaps="false"
+                        app:cornerRadius="20dp" />
+
+                    <TextView
+                        android:id="@+id/tv_review_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Progress (visible mientras carga) -->
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progress"

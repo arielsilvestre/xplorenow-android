@@ -18,6 +18,9 @@ public interface ReservationDao {
     @Query("SELECT * FROM reservations ORDER BY savedAt DESC")
     List<ReservationEntity> getAll();
 
+    @Query("SELECT * FROM reservations WHERE id = :id LIMIT 1")
+    ReservationEntity getById(String id);
+
     @Query("DELETE FROM reservations")
     void deleteAll();
 }
