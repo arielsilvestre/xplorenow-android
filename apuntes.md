@@ -208,3 +208,29 @@ Estilo elegido: verde primario (#1A6B3C) + ámbar secundario (#F4A825), fondo bl
 
 ### Pendiente
 - Logo de la app (formato SVG o PNG 512px con fondo transparente) → reemplazar @mipmap/ic_launcher en login y profile
+
+
+
+CLASE 28/4
+### Material Design => Sistema de diseño (Teoría)
+
+Define como verse y comportarse las apps de android.
+
+- Es un conjunto de reglas y principios:
+    - animaciones con significado
+    - componentes. como lúcen, como responden
+
+Implementa Material Components => Libreria Android (Código)
+
+Te da componentes listos para usar: 
+    - MaterialButton ya tiene ripple y color del tema
+    - TextImputLayout
+
+Un tema es una configuración global de la app
+1) Afecta toda la app => un solo theme controla el aspecto de todos los componentes de la pantalla
+2) Se define en themes.xml => res/values/themes.xml -> ahí definis los colores, fuentes y shapes globales.
+3) se activa en androidManifest => con android:theme="@style/tuTema" 
+
+Estructura: Theme.MaterialComponentes.[modo].[Barra]
+
+
