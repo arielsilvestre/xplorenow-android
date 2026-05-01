@@ -179,6 +179,19 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:clickable="true"
             android:focusable="true" />
+
+        <!-- Link recupero de contraseña -->
+        <TextView
+            android:id="@+id/tv_forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="¿Olvidaste tu contraseña?"
+            android:textColor="#CCF0F9FF"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:clickable="true"
+            android:focusable="true" />
     </LinearLayout>
 
 </FrameLayout>

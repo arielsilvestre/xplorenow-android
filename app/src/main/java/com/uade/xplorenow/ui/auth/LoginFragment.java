@@ -74,6 +74,8 @@ public class LoginFragment extends Fragment {
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
         binding.tvRegisterLink.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_login_to_register));
+        binding.tvForgotPassword.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_login_to_forgotPassword));
 
         if (tokenManager.isBiometricEnabled() && tokenManager.getEncryptedToken() != null) {
             showBiometricPrompt();
@@ -190,7 +192,13 @@ public class LoginFragment extends Fragment {
                     break;
                 case ERROR:
                     setLoading(false);
-                    showError(result.getMessage());
+                    if ("EMAIL_NOT_VERIFIED".equals(result.getMessage())) {
+                        LoginFragmentDirections.ActionLoginToOtpVerification action =
+                                LoginFragmentDirections.actionLoginToOtpVerification(email, "email_verification");
+                        Navigation.findNavController(requireView()).navigate(action);
+                    } else {
+                        showError(result.getMessage());
+                    }
                     break;
             }
         });
