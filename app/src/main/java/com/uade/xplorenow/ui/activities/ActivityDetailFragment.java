@@ -16,8 +16,11 @@ import androidx.navigation.Navigation;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.uade.xplorenow.R;
+import com.uade.xplorenow.data.model.Reservation;
 import com.uade.xplorenow.data.model.TourActivity;
 import com.uade.xplorenow.databinding.FragmentActivityDetailBinding;
+import com.uade.xplorenow.ui.reservations.ReservationViewModel;
+import java.util.List;
 import java.util.Locale;
 
 @AndroidEntryPoint
@@ -40,6 +43,7 @@ public class ActivityDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(ActivityViewModel.class);
+        ReservationViewModel reservationViewModel = new ViewModelProvider(this).get(ReservationViewModel.class);
 
         // Recibir el activityId via SafeArgs
         String activityId = ActivityDetailFragmentArgs.fromBundle(getArguments()).getActivityId();
@@ -74,8 +78,8 @@ public class ActivityDetailFragment extends Fragment {
                         // C2 — info extendida
                         bindExtendedInfo(act);
 
-                        // C1 — calificación
-                        setupReviewSection(activityId);
+                        // C1 — calificación (solo si el usuario ya completó esta actividad)
+                        setupReviewSection(activityId, reservationViewModel);
 
                         binding.btnReserve.setOnClickListener(v -> {
                             ActivityDetailFragmentDirections.ActionActivityDetailToReservationCreate action =
@@ -118,7 +122,24 @@ public class ActivityDetailFragment extends Fragment {
         if (anyVisible) binding.cardExtraInfo.setVisibility(View.VISIBLE);
     }
 
-    private void setupReviewSection(String activityId) {
+    private void setupReviewSection(String activityId, ReservationViewModel reservationViewModel) {
+        // Mostrar card de calificación solo si el usuario tiene una reserva confirmada pasada
+        reservationViewModel.getReservationHistory().observe(getViewLifecycleOwner(), historyResult -> {
+            if (historyResult.getData() != null) {
+                List<Reservation> history = historyResult.getData();
+                boolean completedThisActivity = false;
+                for (Reservation r : history) {
+                    if (activityId.equals(r.getActivityId())) {
+                        completedThisActivity = true;
+                        break;
+                    }
+                }
+                if (completedThisActivity) {
+                    binding.cardReview.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         binding.btnSubmitReview.setOnClickListener(v -> {
             int stars = (int) binding.ratingBar.getRating();
             if (stars == 0) {

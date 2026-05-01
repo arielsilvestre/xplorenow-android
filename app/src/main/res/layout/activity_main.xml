@@ -21,8 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- El contenedor de fragments ocupa pantalla completa desde bajo el banner;
-         la nav flota encima. Los fragments tienen paddingBottom para no quedar tapados. -->
+    <!-- El contenedor de fragments termina en la parte superior de la nav bar.
+         Así los botones fijos de los fragments (ej: "Reservar") quedan visibles. -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -31,7 +31,7 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         app:layout_constraintTop_toBottomOf="@id/tv_offline_banner"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

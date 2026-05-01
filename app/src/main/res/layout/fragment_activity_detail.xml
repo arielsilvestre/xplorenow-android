@@ -231,7 +231,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card para dejar una calificación -->
+            <!-- Card para dejar una calificación — visible solo si el usuario ya completó esta actividad -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_review"
                 android:layout_width="match_parent"
@@ -240,6 +240,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
+                android:visibility="gone"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/surface">
