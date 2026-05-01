@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -46,6 +47,18 @@ public class OtpVerificationFragment extends Fragment {
         otpType = args.getOtpType();
 
         binding.tvSubtitle.setText("Te enviamos un código a " + email);
+
+        // Portal captivo: bloquear back para email_verification
+        if ("email_verification".equals(otpType)) {
+            requireActivity().getOnBackPressedDispatcher().addCallback(
+                    getViewLifecycleOwner(),
+                    new OnBackPressedCallback(true) {
+                        @Override
+                        public void handleOnBackPressed() {
+                            // No hacer nada — el usuario debe verificar para salir
+                        }
+                    });
+        }
 
         binding.btnVerify.setOnClickListener(v -> attemptVerify());
         binding.btnResend.setOnClickListener(v -> resendOtp());

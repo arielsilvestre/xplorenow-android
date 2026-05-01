@@ -75,9 +75,8 @@ public class RegisterFragment extends Fragment {
                     break;
                 case SUCCESS:
                     setLoading(false);
-                    RegisterFragmentDirections.ActionRegisterToOtpVerification action =
-                            RegisterFragmentDirections.actionRegisterToOtpVerification(email, "email_verification");
-                    Navigation.findNavController(requireView()).navigate(action);
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.action_register_to_registrationSuccess);
                     break;
                 case ERROR:
                     setLoading(false);
