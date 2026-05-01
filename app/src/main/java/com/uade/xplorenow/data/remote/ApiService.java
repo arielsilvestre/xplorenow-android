@@ -12,6 +12,10 @@ import com.uade.xplorenow.data.remote.dto.RegisterRequest;
 import com.uade.xplorenow.data.model.Review;
 import com.uade.xplorenow.data.remote.dto.CreateReviewRequest;
 import com.uade.xplorenow.data.remote.dto.FavoriteToggleRequest;
+import com.uade.xplorenow.data.remote.dto.ForgotPasswordRequest;
+import com.uade.xplorenow.data.remote.dto.MessageResponse;
+import com.uade.xplorenow.data.remote.dto.OtpRequest;
+import com.uade.xplorenow.data.remote.dto.ResetPasswordRequest;
 import com.uade.xplorenow.data.remote.dto.UpdateUserRequest;
 
 import java.util.List;
@@ -35,6 +39,18 @@ public interface ApiService {
 
     @GET("api/v1/auth/me")
     Call<ApiResponse<User>> getMe();
+
+    @POST("api/v1/auth/verify-email")
+    Call<ApiResponse<MessageResponse>> verifyEmail(@Body OtpRequest request);
+
+    @POST("api/v1/auth/resend-otp")
+    Call<ApiResponse<MessageResponse>> resendOtp(@Body OtpRequest request);
+
+    @POST("api/v1/auth/forgot-password")
+    Call<ApiResponse<MessageResponse>> forgotPassword(@Body ForgotPasswordRequest request);
+
+    @POST("api/v1/auth/reset-password")
+    Call<ApiResponse<MessageResponse>> resetPassword(@Body ResetPasswordRequest request);
 
     @PATCH("api/v1/users/me")
     Call<ApiResponse<User>> updateMe(@Body UpdateUserRequest request);

@@ -1,11 +1,10 @@
 package com.uade.xplorenow.ui.auth;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,70 +13,68 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.uade.xplorenow.R;
-import com.uade.xplorenow.databinding.FragmentRegisterBinding;
+import com.uade.xplorenow.databinding.FragmentResetPasswordBinding;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class RegisterFragment extends Fragment {
+public class ResetPasswordFragment extends Fragment {
 
-    private FragmentRegisterBinding binding;
+    private FragmentResetPasswordBinding binding;
     private AuthViewModel viewModel;
+    private String email;
+    private String code;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentRegisterBinding.inflate(inflater, container, false);
+        binding = FragmentResetPasswordBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
-        binding.btnRegister.setOnClickListener(v -> attemptRegister());
+        ResetPasswordFragmentArgs args = ResetPasswordFragmentArgs.fromBundle(requireArguments());
+        email = args.getEmail();
+        code = args.getCode();
 
-        binding.tvLoginLink.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_register_to_login));
+        binding.btnReset.setOnClickListener(v -> attemptReset());
     }
 
-    private void attemptRegister() {
-        String name = binding.etName.getText() != null
-                ? binding.etName.getText().toString().trim() : "";
-        String email = binding.etEmail.getText() != null
-                ? binding.etEmail.getText().toString().trim() : "";
-        String password = binding.etPassword.getText() != null
-                ? binding.etPassword.getText().toString() : "";
+    private void attemptReset() {
+        String newPassword = binding.etNewPassword.getText() != null
+                ? binding.etNewPassword.getText().toString() : "";
+        String confirmPassword = binding.etConfirmPassword.getText() != null
+                ? binding.etConfirmPassword.getText().toString() : "";
 
-        if (name.isEmpty()) {
-            binding.tilName.setError("Ingresá tu nombre");
+        binding.tilNewPassword.setError(null);
+        binding.tilConfirmPassword.setError(null);
+
+        if (newPassword.length() < 6) {
+            binding.tilNewPassword.setError("La contraseña debe tener al menos 6 caracteres");
             return;
         }
-        if (email.isEmpty()) {
-            binding.tilEmail.setError("Ingresá tu email");
-            return;
-        }
-        if (password.length() < 6) {
-            binding.tilPassword.setError("La contraseña debe tener al menos 6 caracteres");
+        if (!newPassword.equals(confirmPassword)) {
+            binding.tilConfirmPassword.setError("Las contraseñas no coinciden");
             return;
         }
 
-        binding.tilName.setError(null);
-        binding.tilEmail.setError(null);
-        binding.tilPassword.setError(null);
-
-        viewModel.register(name, email, password).observe(getViewLifecycleOwner(), result -> {
+        viewModel.resetPassword(email, code, newPassword).observe(getViewLifecycleOwner(), result -> {
             switch (result.getStatus()) {
                 case LOADING:
                     setLoading(true);
                     break;
                 case SUCCESS:
                     setLoading(false);
-                    RegisterFragmentDirections.ActionRegisterToOtpVerification action =
-                            RegisterFragmentDirections.actionRegisterToOtpVerification(email, "email_verification");
-                    Navigation.findNavController(requireView()).navigate(action);
+                    Toast.makeText(requireContext(),
+                            "Contraseña actualizada. Ya podés iniciar sesión.", Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.action_resetPassword_to_login);
                     break;
                 case ERROR:
                     setLoading(false);
@@ -89,7 +86,7 @@ public class RegisterFragment extends Fragment {
 
     private void setLoading(boolean loading) {
         binding.progress.setVisibility(loading ? View.VISIBLE : View.GONE);
-        binding.btnRegister.setEnabled(!loading);
+        binding.btnReset.setEnabled(!loading);
         binding.tvError.setVisibility(View.GONE);
     }
 
