@@ -50,6 +50,12 @@ public class TourActivity {
     @SerializedName("cancellationPolicy")
     private String cancellationPolicy;
 
+    @SerializedName("departureLat")
+    private Double departureLat;
+
+    @SerializedName("departureLng")
+    private Double departureLng;
+
     public String getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
@@ -64,4 +70,6 @@ public class TourActivity {
     public String getMeetingPoint() { return meetingPoint; }
     public String getWhatsIncluded() { return whatsIncluded; }
     public String getCancellationPolicy() { return cancellationPolicy; }
+    public Double getDepartureLat() { return departureLat; }
+    public Double getDepartureLng() { return departureLng; }
 }

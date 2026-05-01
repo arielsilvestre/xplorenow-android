@@ -178,6 +178,50 @@
                             android:ellipsize="end" />
                     </LinearLayout>
 
+                    <!-- Ubicación en Maps -->
+                    <LinearLayout
+                        android:id="@+id/row_departure_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_location_pin"
+                            android:contentDescription="Ubicación" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_meeting_point_map"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                                android:textColor="@color/on_surface"
+                                android:maxLines="2"
+                                android:ellipsize="end" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ver en Google Maps →"
+                                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                                android:textColor="@color/secondary" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <!-- Qué incluye -->
                     <LinearLayout
                         android:id="@+id/row_whats_included"

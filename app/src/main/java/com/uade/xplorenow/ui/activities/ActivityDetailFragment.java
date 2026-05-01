@@ -2,6 +2,8 @@ package com.uade.xplorenow.ui.activities;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,6 +110,25 @@ public class ActivityDetailFragment extends Fragment {
             binding.tvMeetingPoint.setText(act.getMeetingPoint());
             anyVisible = true;
         }
+
+        Double lat = act.getDepartureLat();
+        Double lng = act.getDepartureLng();
+        if (lat != null && lng != null) {
+            binding.rowDepartureLocation.setVisibility(View.VISIBLE);
+            binding.tvMeetingPointMap.setText(act.getMeetingPoint());
+            binding.rowDepartureLocation.setOnClickListener(v -> {
+                String label = Uri.encode(act.getMeetingPoint() != null
+                        ? act.getMeetingPoint() : "Punto de partida");
+                Uri geoUri = Uri.parse("geo:" + lat + "," + lng +
+                        "?q=" + lat + "," + lng + "(" + label + ")");
+                Intent intent = new Intent(Intent.ACTION_VIEW, geoUri);
+                startActivity(intent);
+            });
+            anyVisible = true;
+        } else {
+            binding.rowDepartureLocation.setVisibility(View.GONE);
+        }
+
         if (act.getWhatsIncluded() != null && !act.getWhatsIncluded().isEmpty()) {
             binding.rowWhatsIncluded.setVisibility(View.VISIBLE);
             binding.tvWhatsIncluded.setText(act.getWhatsIncluded());
