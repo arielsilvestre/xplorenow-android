@@ -12,9 +12,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.uade.xplorenow.ui.activities.ActivityAdapter;
-import com.uade.xplorenow.ui.activities.ActivityListFragmentDirections;
+import com.uade.xplorenow.data.model.FavoritesData;
 import com.uade.xplorenow.databinding.FragmentFavoritesBinding;
+import com.uade.xplorenow.ui.activities.ActivityAdapter;
+import com.uade.xplorenow.ui.destinations.DestinationAdapter;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -23,7 +24,8 @@ public class FavoritesFragment extends Fragment {
 
     private FragmentFavoritesBinding binding;
     private FavoriteViewModel viewModel;
-    private ActivityAdapter adapter;
+    private ActivityAdapter activityAdapter;
+    private DestinationAdapter destinationAdapter;
 
     @Nullable
     @Override
@@ -40,14 +42,23 @@ public class FavoritesFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
 
-        adapter = new ActivityAdapter(activity -> {
+        activityAdapter = new ActivityAdapter(activity -> {
             FavoritesFragmentDirections.ActionFavoritesToDetail action =
                     FavoritesFragmentDirections.actionFavoritesToDetail(activity.getId());
             Navigation.findNavController(view).navigate(action);
         });
 
+        destinationAdapter = new DestinationAdapter(destination -> {
+            FavoritesFragmentDirections.ActionFavoritesToDestinationDetail action =
+                    FavoritesFragmentDirections.actionFavoritesToDestinationDetail(destination.getId());
+            Navigation.findNavController(view).navigate(action);
+        });
+
         binding.rvFavorites.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.rvFavorites.setAdapter(adapter);
+        binding.rvFavorites.setAdapter(activityAdapter);
+
+        binding.rvFavoriteDestinations.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvFavoriteDestinations.setAdapter(destinationAdapter);
 
         binding.toolbar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigateUp());
@@ -61,11 +72,28 @@ public class FavoritesFragment extends Fragment {
                     break;
                 case SUCCESS:
                     binding.progress.setVisibility(View.GONE);
-                    if (result.getData() == null || result.getData().isEmpty()) {
-                        binding.tvEmpty.setVisibility(View.VISIBLE);
+                    if (result.getData() != null) {
+                        FavoritesData data = result.getData();
+                        boolean hasActivities = data.getActivities() != null && !data.getActivities().isEmpty();
+                        boolean hasDestinations = data.getDestinations() != null && !data.getDestinations().isEmpty();
+
+                        if (hasActivities) {
+                            activityAdapter.setActivities(data.getActivities());
+                            binding.sectionActivities.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.sectionActivities.setVisibility(View.GONE);
+                        }
+
+                        if (hasDestinations) {
+                            destinationAdapter.setDestinations(data.getDestinations());
+                            binding.sectionDestinations.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.sectionDestinations.setVisibility(View.GONE);
+                        }
+
+                        binding.tvEmpty.setVisibility((!hasActivities && !hasDestinations) ? View.VISIBLE : View.GONE);
                     } else {
-                        binding.tvEmpty.setVisibility(View.GONE);
-                        adapter.setActivities(result.getData());
+                        binding.tvEmpty.setVisibility(View.VISIBLE);
                     }
                     break;
                 case ERROR:

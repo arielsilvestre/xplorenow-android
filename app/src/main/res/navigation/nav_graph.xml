@@ -88,6 +88,8 @@
         android:label="Detalle del destino">
         <argument android:name="destinationId"
             app:argType="string" />
+        <action android:id="@+id/action_destinationDetail_to_activityDetail"
+            app:destination="@id/activityDetailFragment" />
     </fragment>
 
     <fragment android:id="@+id/activityListFragment"
@@ -151,6 +153,8 @@
         android:label="Mis favoritos">
         <action android:id="@+id/action_favorites_to_detail"
             app:destination="@id/activityDetailFragment" />
+        <action android:id="@+id/action_favorites_to_destinationDetail"
+            app:destination="@id/destinationDetailFragment" />
     </fragment>
 
     <fragment android:id="@+id/biometricFragment"

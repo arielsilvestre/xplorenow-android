@@ -3,11 +3,9 @@ package com.uade.xplorenow.ui.favorites;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.uade.xplorenow.data.model.TourActivity;
+import com.uade.xplorenow.data.model.FavoritesData;
 import com.uade.xplorenow.data.repository.FavoriteRepository;
 import com.uade.xplorenow.util.Resource;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,11 +21,15 @@ public class FavoriteViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public LiveData<Resource<List<TourActivity>>> getMyFavorites() {
+    public LiveData<Resource<FavoritesData>> getMyFavorites() {
         return repository.getMyFavorites();
     }
 
     public LiveData<Resource<Void>> toggleFavorite(String activityId) {
         return repository.toggleFavorite(activityId);
+    }
+
+    public LiveData<Resource<Void>> toggleFavoriteDestination(String destinationId) {
+        return repository.toggleFavoriteDestination(destinationId);
     }
 }

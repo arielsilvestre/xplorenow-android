@@ -18,13 +18,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Hero image -->
-            <ImageView
-                android:id="@+id/iv_detail_image"
+            <!-- Hero image con botón favorito superpuesto -->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:scaleType="centerCrop"
-                android:background="@color/primary_container" />
+                android:layout_height="300dp">
+
+                <ImageView
+                    android:id="@+id/iv_detail_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@color/primary_container" />
+
+                <ImageButton
+                    android:id="@+id/btn_favorite"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/bg_favorite_button"
+                    android:src="@drawable/ic_favorite_border"
+                    android:contentDescription="Favorito"
+                    android:padding="8dp" />
+
+            </FrameLayout>
 
             <!-- Info card -->
             <com.google.android.material.card.MaterialCardView

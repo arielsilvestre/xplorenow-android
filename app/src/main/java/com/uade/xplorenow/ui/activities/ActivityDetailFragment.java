@@ -21,11 +21,14 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.uade.xplorenow.R;
+import com.uade.xplorenow.data.model.FavoritesData;
 import com.uade.xplorenow.data.model.Reservation;
 import com.uade.xplorenow.data.model.TourActivity;
 import com.uade.xplorenow.data.model.TourGuide;
 import com.uade.xplorenow.databinding.FragmentActivityDetailBinding;
+import com.uade.xplorenow.ui.favorites.FavoriteViewModel;
 import com.uade.xplorenow.ui.reservations.ReservationViewModel;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +37,7 @@ public class ActivityDetailFragment extends Fragment {
 
     private FragmentActivityDetailBinding binding;
     private ActivityViewModel viewModel;
+    private FavoriteViewModel favoriteViewModel;
 
     @Nullable
     @Override
@@ -50,9 +54,13 @@ public class ActivityDetailFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(ActivityViewModel.class);
         ReservationViewModel reservationViewModel = new ViewModelProvider(this).get(ReservationViewModel.class);
+        favoriteViewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
 
         // Recibir el activityId via SafeArgs
         String activityId = ActivityDetailFragmentArgs.fromBundle(getArguments()).getActivityId();
+
+        // Inicializar estado del botón favorito
+        setupFavoriteButton(activityId);
 
         viewModel.getActivityById(activityId).observe(getViewLifecycleOwner(), result -> {
             switch (result.getStatus()) {
@@ -99,6 +107,47 @@ public class ActivityDetailFragment extends Fragment {
                     break;
             }
         });
+    }
+
+    private void setupFavoriteButton(String activityId) {
+        // Consultar lista de favoritos y marcar si este activityId está
+        favoriteViewModel.getMyFavorites().observe(getViewLifecycleOwner(), result -> {
+            if (result.getData() != null) {
+                FavoritesData data = result.getData();
+                boolean isFav = false;
+                if (data.getActivities() != null) {
+                    for (TourActivity a : data.getActivities()) {
+                        if (activityId.equals(a.getId())) {
+                            isFav = true;
+                            break;
+                        }
+                    }
+                }
+                setFavoriteIcon(isFav);
+            }
+        });
+
+        binding.btnFavorite.setOnClickListener(v -> {
+            boolean currentlyFav = Boolean.TRUE.equals(binding.btnFavorite.getTag());
+            favoriteViewModel.toggleFavorite(activityId).observe(getViewLifecycleOwner(), result -> {
+                switch (result.getStatus()) {
+                    case SUCCESS:
+                        setFavoriteIcon(!currentlyFav);
+                        break;
+                    case ERROR:
+                        Snackbar.make(binding.getRoot(), "Error al actualizar favorito", Snackbar.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+    }
+
+    private void setFavoriteIcon(boolean isFavorite) {
+        binding.btnFavorite.setTag(isFavorite);
+        binding.btnFavorite.setImageResource(
+                isFavorite ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
     }
 
     private void bindExtendedInfo(TourActivity act) {

@@ -1,6 +1,7 @@
 package com.uade.xplorenow.data.remote;
 
 import com.uade.xplorenow.data.model.Destination;
+import com.uade.xplorenow.data.model.FavoritesData;
 import com.uade.xplorenow.data.model.Reservation;
 import com.uade.xplorenow.data.model.TourActivity;
 import com.uade.xplorenow.data.model.User;
@@ -16,6 +17,7 @@ import com.uade.xplorenow.data.remote.dto.ForgotPasswordRequest;
 import com.uade.xplorenow.data.remote.dto.MessageResponse;
 import com.uade.xplorenow.data.remote.dto.OtpRequest;
 import com.uade.xplorenow.data.remote.dto.ResetPasswordRequest;
+import com.uade.xplorenow.data.remote.dto.ToggleDestinationRequest;
 import com.uade.xplorenow.data.remote.dto.UpdateUserRequest;
 
 import java.util.List;
@@ -93,9 +95,12 @@ public interface ApiService {
     Call<ApiResponse<Review>> createReview(@Body CreateReviewRequest request);
 
     // --- Favorites ---
+    @GET("api/v1/favorites/me")
+    Call<ApiResponse<FavoritesData>> getMyFavorites();
+
     @POST("api/v1/favorites/toggle")
     Call<ApiResponse<Void>> toggleFavorite(@Body FavoriteToggleRequest request);
 
-    @GET("api/v1/favorites/me")
-    Call<ApiResponse<List<TourActivity>>> getMyFavorites();
+    @POST("api/v1/favorites/toggle-destination")
+    Call<ApiResponse<Void>> toggleFavoriteDestination(@Body ToggleDestinationRequest request);
 }
