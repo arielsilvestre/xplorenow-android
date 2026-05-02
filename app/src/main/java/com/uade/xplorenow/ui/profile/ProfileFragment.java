@@ -67,9 +67,9 @@ public class ProfileFragment extends Fragment {
 
         viewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
-                binding.tvName.setText(user.getName() != null ? user.getName() : "—");
+                if (user.getName() != null) binding.etName.setText(user.getName());
                 binding.tvEmail.setText(user.getEmail() != null ? user.getEmail() : "—");
-                // Restaurar chips de preferencias
+                if (user.getPhone() != null) binding.etPhone.setText(user.getPhone());
                 if (user.getPreferences() != null) {
                     binding.chipPrefTour.setChecked(user.getPreferences().contains("tour"));
                     binding.chipPrefFreeTour.setChecked(user.getPreferences().contains("free_tour"));
@@ -80,18 +80,26 @@ public class ProfileFragment extends Fragment {
         });
 
         binding.btnSavePreferences.setOnClickListener(v -> {
+            String name = binding.etName.getText() != null
+                    ? binding.etName.getText().toString().trim() : null;
+            String phone = binding.etPhone.getText() != null
+                    ? binding.etPhone.getText().toString().trim() : null;
             List<String> selected = new ArrayList<>();
             if (binding.chipPrefTour.isChecked()) selected.add("tour");
             if (binding.chipPrefFreeTour.isChecked()) selected.add("free_tour");
             if (binding.chipPrefExcursion.isChecked()) selected.add("excursion");
             if (binding.chipPrefExperience.isChecked()) selected.add("experience");
-            viewModel.updatePreferences(selected);
+            viewModel.updateProfile(
+                    name != null && !name.isEmpty() ? name : null,
+                    phone != null && !phone.isEmpty() ? phone : null,
+                    null,
+                    selected);
         });
 
         viewModel.getPreferencesSaved().observe(getViewLifecycleOwner(), ok -> {
             if (ok == null) return;
             Snackbar.make(binding.getRoot(),
-                    ok ? "Preferencias guardadas" : "Error al guardar. Sin conexión.",
+                    ok ? "Cambios guardados" : "Error al guardar. Sin conexión.",
                     Snackbar.LENGTH_SHORT).show();
         });
 

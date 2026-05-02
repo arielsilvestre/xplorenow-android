@@ -35,6 +35,11 @@ public class ActivityViewModel extends ViewModel {
         return repository.getActivities(category);
     }
 
+    public LiveData<Resource<List<TourActivity>>> getActivitiesByCategories(List<String> categories) {
+        if (categories == null || categories.isEmpty()) return repository.getActivities();
+        return repository.getActivitiesByCategories(categories);
+    }
+
     public LiveData<Resource<TourActivity>> getActivityById(String id) {
         return repository.getActivityById(id);
     }

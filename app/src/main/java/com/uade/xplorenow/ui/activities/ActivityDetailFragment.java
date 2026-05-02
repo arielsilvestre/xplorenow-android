@@ -15,11 +15,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.uade.xplorenow.R;
 import com.uade.xplorenow.data.model.Reservation;
 import com.uade.xplorenow.data.model.TourActivity;
+import com.uade.xplorenow.data.model.TourGuide;
 import com.uade.xplorenow.databinding.FragmentActivityDetailBinding;
 import com.uade.xplorenow.ui.reservations.ReservationViewModel;
 import java.util.List;
@@ -137,6 +141,44 @@ public class ActivityDetailFragment extends Fragment {
         if (act.getCancellationPolicy() != null && !act.getCancellationPolicy().isEmpty()) {
             binding.rowCancellation.setVisibility(View.VISIBLE);
             binding.tvCancellationPolicy.setText(act.getCancellationPolicy());
+            anyVisible = true;
+        }
+        if (act.getLanguage() != null && !act.getLanguage().isEmpty()) {
+            binding.rowLanguage.setVisibility(View.VISIBLE);
+            binding.tvLanguage.setText(act.getLanguage());
+            anyVisible = true;
+        }
+        TourGuide guide = act.getGuide();
+        if (guide != null) {
+            binding.rowGuide.setVisibility(View.VISIBLE);
+            binding.tvGuideName.setText(guide.getName());
+            if (guide.getBio() != null) binding.tvGuideBio.setText(guide.getBio());
+            if (guide.getPhotoUrl() != null) {
+                Glide.with(this).load(guide.getPhotoUrl())
+                        .circleCrop().into(binding.ivGuidePhoto);
+            }
+            anyVisible = true;
+        }
+        List<String> photos = act.getPhotos();
+        if (photos != null && !photos.isEmpty()) {
+            binding.rowGallery.setVisibility(View.VISIBLE);
+            int sizePx = (int) (120 * getResources().getDisplayMetrics().density);
+            int heightPx = (int) (80 * getResources().getDisplayMetrics().density);
+            int marginPx = (int) (8 * getResources().getDisplayMetrics().density);
+            int radiusPx = (int) (8 * getResources().getDisplayMetrics().density);
+            for (String url : photos) {
+                ImageView iv = new ImageView(requireContext());
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(sizePx, heightPx);
+                lp.setMarginEnd(marginPx);
+                iv.setLayoutParams(lp);
+                iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                iv.setClipToOutline(true);
+                iv.setBackground(new android.graphics.drawable.GradientDrawable());
+                ((android.graphics.drawable.GradientDrawable) iv.getBackground())
+                        .setCornerRadius(radiusPx);
+                Glide.with(this).load(url).centerCrop().into(iv);
+                binding.llGallery.addView(iv);
+            }
             anyVisible = true;
         }
 

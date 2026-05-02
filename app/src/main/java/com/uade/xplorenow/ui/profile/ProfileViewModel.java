@@ -62,11 +62,14 @@ public class ProfileViewModel extends ViewModel {
         });
     }
 
-    public void updatePreferences(List<String> preferences) {
-        apiService.updateMe(new UpdateUserRequest(preferences))
+    public void updateProfile(String name, String phone, String photoUrl, List<String> preferences) {
+        apiService.updateMe(new UpdateUserRequest(name, phone, photoUrl, preferences))
                 .enqueue(new Callback<ApiResponse<User>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            user.setValue(response.body().getData());
+                        }
                         preferencesSaved.setValue(response.isSuccessful());
                     }
                     @Override

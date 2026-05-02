@@ -69,6 +69,9 @@ public interface ApiService {
     @GET("api/v1/activities")
     Call<ApiResponse<List<TourActivity>>> getActivities();
 
+    @GET("api/v1/activities")
+    Call<ApiResponse<List<TourActivity>>> getActivitiesByCategories(@Query("categories") String categories);
+
     @GET("api/v1/activities/{id}")
     Call<ApiResponse<TourActivity>> getActivityById(@Path("id") String id);
 
