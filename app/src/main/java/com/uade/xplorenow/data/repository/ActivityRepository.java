@@ -59,6 +59,29 @@ public class ActivityRepository {
         return result;
     }
 
+    public LiveData<Resource<List<TourActivity>>> getActivitiesByCategories(List<String> categories) {
+        MutableLiveData<Resource<List<TourActivity>>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading());
+        String csv = String.join(",", categories);
+        apiService.getActivitiesByCategories(csv)
+                .enqueue(new Callback<ApiResponse<List<TourActivity>>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<List<TourActivity>>> c,
+                                           Response<ApiResponse<List<TourActivity>>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            result.setValue(Resource.success(response.body().getData()));
+                        } else {
+                            result.setValue(Resource.error("Error al cargar actividades"));
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ApiResponse<List<TourActivity>>> c, Throwable t) {
+                        result.setValue(Resource.error("Sin conexión. Verificá tu red."));
+                    }
+                });
+        return result;
+    }
+
     public LiveData<Resource<TourActivity>> getActivityById(String id) {
         MutableLiveData<Resource<TourActivity>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());

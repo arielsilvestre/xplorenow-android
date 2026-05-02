@@ -85,6 +85,14 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                         ContextCompat.getColor(binding.getRoot().getContext(), R.color.on_surface_variant));
             }
 
+            // Duración
+            if (activity.getDuration() != null && !activity.getDuration().isEmpty()) {
+                binding.tvActivityDuration.setText("⏱ " + activity.getDuration());
+                binding.tvActivityDuration.setVisibility(android.view.View.VISIBLE);
+            } else {
+                binding.tvActivityDuration.setVisibility(android.view.View.GONE);
+            }
+
             // Badge de categoría: texto + color según tipo
             String category = activity.getCategory();
             binding.chipCategory.setText(formatCategory(category));

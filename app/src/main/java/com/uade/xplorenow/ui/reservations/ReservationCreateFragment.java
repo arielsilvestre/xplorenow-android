@@ -26,6 +26,7 @@ public class ReservationCreateFragment extends Fragment {
     private FragmentReservationCreateBinding binding;
     private ReservationViewModel viewModel;
     private int peopleCount = 1;
+    private int maxPeople = 20;
     private String selectedDate = "";
 
     @Nullable
@@ -51,6 +52,9 @@ public class ReservationCreateFragment extends Fragment {
         activityViewModel.getActivityById(activityId).observe(getViewLifecycleOwner(), result -> {
             if (result.getData() != null) {
                 binding.etActivity.setText(result.getData().getName());
+                int spots = result.getData().getAvailableSpots();
+                maxPeople = spots > 0 ? spots : 0;
+                updatePeopleCount();
             }
         });
 
@@ -67,7 +71,7 @@ public class ReservationCreateFragment extends Fragment {
             }
         });
         binding.btnIncrease.setOnClickListener(v -> {
-            if (peopleCount < 20) {
+            if (peopleCount < maxPeople) {
                 peopleCount++;
                 updatePeopleCount();
             }
@@ -102,6 +106,12 @@ public class ReservationCreateFragment extends Fragment {
     private void updatePeopleCount() {
         binding.tvPeopleCount.setText(String.valueOf(peopleCount));
         binding.btnDecrease.setEnabled(peopleCount > 1);
+        binding.btnIncrease.setEnabled(peopleCount < maxPeople);
+        binding.btnConfirm.setEnabled(maxPeople > 0);
+        if (maxPeople == 0) {
+            binding.tvError.setText("Sin cupos disponibles para esta actividad");
+            binding.tvError.setVisibility(View.VISIBLE);
+        }
     }
 
     private void createReservation(String activityId) {

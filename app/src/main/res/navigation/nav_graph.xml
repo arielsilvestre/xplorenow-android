@@ -71,7 +71,10 @@
     <!-- MAIN (Bottom Nav) -->
     <fragment android:id="@+id/homeFragment"
         android:name="com.uade.xplorenow.ui.home.HomeFragment"
-        android:label="Inicio" />
+        android:label="Inicio">
+        <action android:id="@+id/action_home_to_activityDetail"
+            app:destination="@id/activityDetailFragment" />
+    </fragment>
 
     <fragment android:id="@+id/destinationListFragment"
         android:name="com.uade.xplorenow.ui.destinations.DestinationListFragment"

@@ -2,6 +2,8 @@ package com.uade.xplorenow.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Modelo de actividad turística.
  * Renombrado TourActivity para evitar colisión con android.app.Activity.
@@ -56,6 +58,15 @@ public class TourActivity {
     @SerializedName("departureLng")
     private Double departureLng;
 
+    @SerializedName("language")
+    private String language;
+
+    @SerializedName("photos")
+    private List<String> photos;
+
+    @SerializedName("guide")
+    private TourGuide guide;
+
     public String getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
@@ -72,4 +83,7 @@ public class TourActivity {
     public String getCancellationPolicy() { return cancellationPolicy; }
     public Double getDepartureLat() { return departureLat; }
     public Double getDepartureLng() { return departureLng; }
+    public String getLanguage() { return language; }
+    public List<String> getPhotos() { return photos; }
+    public TourGuide getGuide() { return guide; }
 }

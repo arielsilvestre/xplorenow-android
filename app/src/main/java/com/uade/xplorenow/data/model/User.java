@@ -17,6 +17,9 @@ public class User {
     @SerializedName("role")
     private String role;
 
+    @SerializedName("phone")
+    private String phone;
+
     @SerializedName("preferences")
     private List<String> preferences;
 
@@ -31,5 +34,6 @@ public class User {
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getRole() { return role; }
+    public String getPhone() { return phone; }
     public List<String> getPreferences() { return preferences; }
 }
